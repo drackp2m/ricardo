@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: -25vh;
+    left: -25vw;
+    width: 150vw;
+    height: 150vh;
+    opacity: 1;
+    background-image: url('../asset/sand.svg'), url('../asset/patt.svg');
+    background-repeat: repeat, repeat;
+    background-size: 184px, 46px;
+    background-position: 0 0, -6px 36px;
+    transform: rotate(10deg);
+    pointer-events: none;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 50%);
+    backdrop-filter: blur(2px);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 4px;
+    display: none;
+}
+
+#userName {
+    font-size: 1.2em;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    display: none;
+}
+
+#continueButton {
+    display: none;
+    margin-top: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button-back {
+    background-color: #808080;
+}
+
+.button-back:hover {
+    background-color: #666666;
+}

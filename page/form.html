@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+    <link rel="stylesheet" href="../css/styles.css">
+    <title>Control de Horario</title>
+</head>
+<body>
+    <form id="horariosForm" onsubmit="enviarDatos(event)">
+        <div class="form-group">
+            <label>Usuario: <span id="displayName"></span></label>
+        </div>
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required value="2025-04-09">
+        </div>
+        <div class="form-group">
+            <label for="entrada">Hora de entrada:</label>
+            <input type="time" id="entrada" name="entrada" required value="12:00">
+        </div>
+        <div class="form-group">
+            <label for="salida">Hora de salida:</label>
+            <input type="time" id="salida" name="salida" required value="17:00">
+        </div>
+        <div class="form-buttons">
+            <button type="button" class="button-back" onclick="window.location.href='index.html'">Atrás</button>
+            <button type="submit" class="button-submit">Enviar</button>
+        </div>
+    </form>
+    <div id="errorMessage" class="error-message"></div>
+
+    <script>
+        // Verificar si hay usuario almacenado
+        window.onload = function() {
+            const uuid = localStorage.getItem('userUuid');
+            const name = localStorage.getItem('userName');
+            if (!uuid || !name) {
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('displayName').textContent = name;
+            
+            // Establecer fecha actual por defecto
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha').value = today;
+        };
+
+        // ...resto del código del formulario anterior...
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+  <defs>
+    <pattern id="alhambraPattern" patternUnits="userSpaceOnUse" width="200" height="200">
+      <style>
+        .bg { fill: #f8f4e3; } /* Fondo crema */
+        .gold { fill: #daa520; } /* Estrellas doradas */
+        .darkBlue { fill: #2a52be; } /* Azul oscuro */
+        .mediumBlue { fill: #4682b4; } /* Azul medio */
+        .greenTeal { fill: #008080; } /* Verde azulado */
+        .black { fill: #1a1a1a; } /* Negro */
+        .tile { stroke: #ffffff; stroke-width: 2; } /* Simula las líneas de separación */
+      </style>
+
+      <!-- Fondo -->
+      <rect width="200" height="200" class="bg" />
+
+      <!-- Estrella central -->
+      <polygon class="tile darkBlue" points="100,20 110,50 140,60 110,70 100,100 90,70 60,60 90,50" />
+      <polygon class="tile mediumBlue" points="100,40 105,55 120,60 105,65 100,80 95,65 80,60 95,55" />
+
+      <!-- Estrellas doradas pequeñas -->
+      <polygon class="tile gold" points="50,50 55,60 65,65 55,70 50,80 45,70 35,65 45,60" />
+      <polygon class="tile gold" points="150,50 155,60 165,65 155,70 150,80 145,70 135,65 145,60" />
+      <polygon class="tile gold" points="50,150 55,160 65,165 55,170 50,180 45,170 35,165 45,160" />
+      <polygon class="tile gold" points="150,150 155,160 165,165 155,170 150,180 145,170 135,165 145,160" />
+
+      <!-- Hexágonos verdes -->
+      <polygon class="tile greenTeal" points="100,120 120,140 100,160 80,140" />
+      <polygon class="tile greenTeal" points="20,100 40,120 20,140 0,120" />
+      <polygon class="tile greenTeal" points="180,100 200,120 180,140 160,120" />
+      <polygon class="tile greenTeal" points="100,40 120,60 100,80 80,60" />
+
+      <!-- Elementos negros en las esquinas -->
+      <polygon class="tile black" points="0,0 40,0 20,20" />
+      <polygon class="tile black" points="200,0 160,0 180,20" />
+      <polygon class="tile black" points="0,200 40,200 20,180" />
+      <polygon class="tile black" points="200,200 160,200 180,180" />
+    </pattern>
+  </defs>
+
+  <!-- Aplicar el patrón -->
+  <rect x="0" y="0" width="100%" height="100%" fill="url(#alhambraPattern)" />
+</svg>

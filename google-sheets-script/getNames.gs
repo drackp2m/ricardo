@@ -12,8 +12,10 @@ function doPost(e) {
   const data = JSON.parse(e.postData.contents);
   
   // Buscar el usuario por UUID
-  const uuidColumn = 3; // Asumiendo que el UUID está en la columna C
-  const nameColumn = 1; // Asumiendo que el nombre está en la columna A
+  const uuidColumn = 4; // UUID está en la columna D
+  const nameColumn = 1; // Nombre en columna A
+  const surnameColumn = 2; // Apellido en columna B
+  const descriptionColumn = 3; // Descripción en columna C
   
   // Verificar que hay datos en la hoja
   if (usersSheet.getLastRow() <= 1) {
@@ -24,7 +26,7 @@ function doPost(e) {
   }
   
   const userRows = usersSheet.getRange(2, 1, usersSheet.getLastRow()-1, uuidColumn).getValues();
-  let userName = null;
+  let userData = null;
   
   // Verificar el UUID proporcionado
   for (let i = 0; i < userRows.length; i++) {
@@ -33,13 +35,17 @@ function doPost(e) {
     
     // Comparación no sensible a mayúsculas/minúsculas
     if (storedUuid.toLowerCase() === inputUuid.toLowerCase()) {
-      userName = userRows[i][nameColumn-1]; // Obtener el nombre del usuario
+      userData = {
+        name: userRows[i][nameColumn-1],
+        surname: userRows[i][surnameColumn-1],
+        description: userRows[i][descriptionColumn-1]
+      };
       break;
     }
   }
   
   // Si no se encontró el usuario, devolver un error
-  if (!userName) {
+  if (!userData) {
     Logger.log('UUID inválido: ' + data.uuid);
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
@@ -48,10 +54,10 @@ function doPost(e) {
   }
   
   // Buscar o crear una hoja con el nombre del usuario
-  let userSheet = ss.getSheetByName(userName);
+  let userSheet = ss.getSheetByName(userData.name);
   if (!userSheet) {
     // Crear una nueva hoja para el usuario si no existe
-    userSheet = ss.insertSheet(userName);
+    userSheet = ss.insertSheet(userData.name);
     // Crear encabezados para la hoja del usuario
     userSheet.getRange(1, 1, 1, 3).setValues([['Fecha', 'Hora Entrada', 'Hora Salida']]);
   }
@@ -69,7 +75,9 @@ function doPost(e) {
   
   return ContentService.createTextOutput(JSON.stringify({
     success: true,
-    message: 'Datos guardados correctamente'
+    name: userData.name,
+    surname: userData.surname,
+    description: userData.description
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -93,15 +101,19 @@ function doGet(e) {
   }
 
   // Buscar usuario por UUID
-  const uuidColumn = 3; // UUID en columna C
+  const uuidColumn = 4; // UUID en columna D
   const nameColumn = 1; // Nombre en columna A
+  const surnameColumn = 2; // Apellido en columna B
+  const descriptionColumn = 3; // Descripción en columna C
   const userRows = usersSheet.getRange(2, 1, usersSheet.getLastRow()-1, uuidColumn).getValues();
   
   for (let i = 0; i < userRows.length; i++) {
     if (String(userRows[i][uuidColumn-1]).trim().toLowerCase() === uuid.toLowerCase()) {
       return jsonResponse({
         success: true,
-        name: userRows[i][nameColumn-1]
+        name: userRows[i][nameColumn-1],
+        surname: userRows[i][surnameColumn-1],
+        description: userRows[i][descriptionColumn-1]
       }, e.parameter.callback);
     }
   }
