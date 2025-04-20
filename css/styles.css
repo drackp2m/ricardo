@@ -1,48 +1,73 @@
+@import url('./reset.css');
+@import url('./fonts.css');
+@import url('./variables.css');
+@import url('./utilities.css');
+@import url('./colors.css');
+@import url('./input.css');
+
+* {
+    user-select: none;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Quicksand', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    height: 100vh;
     color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 body::before {
     content: "";
     position: fixed;
-    top: -25vh;
-    left: -25vw;
-    width: 150vw;
-    height: 150vh;
-    opacity: 1;
-    background-image: url('../asset/sand.svg'), url('../asset/patt.svg');
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    background-image: url('../asset/vector/noise-effect.svg'), url('../asset/vector/ice-cream-cookie-pattern.svg');
     background-repeat: repeat, repeat;
     background-size: 184px, 46px;
     background-position: 0 0, -6px 36px;
-    transform: rotate(10deg);
+    transform: rotate(145deg);
     pointer-events: none;
 }
 
-form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.card {
+    width: 400px;
+    border: 1px solid rgba(256, 256, 256, 35%);
+    border-radius: 10px;
     background-color: rgba(255, 255, 255, 50%);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(2.5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-    margin-bottom: 15px;
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../asset/vector/noise-effect.svg');
+    opacity: 0.5;
+    z-index: -1;
+}
+
+.card .header {
+    background-color: rgba(256, 256, 256, 35%);
+    border-radius: 10px 10px 0 0;
+}
+
+.error {
+    color: var(--warning);
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
 }
 
 button {
@@ -51,20 +76,28 @@ button {
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+button.loading::before {
+    content: "";
+
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid #fff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 0.5em;
+    vertical-align: middle;
 }
 
 button:hover {
     background-color: #45a049;
-}
-
-.error-message {
-    color: red;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid red;
-    border-radius: 4px;
-    display: none;
 }
 
 #userName {
@@ -79,18 +112,4 @@ button:hover {
 #continueButton {
     display: none;
     margin-top: 10px;
-}
-
-.form-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.button-back {
-    background-color: #808080;
-}
-
-.button-back:hover {
-    background-color: #666666;
 }

@@ -1,46 +1,51 @@
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwyGR1kIva44IQDisCSGro8rW-ssa6mkyS72sIkUekGNnSeCXufdrNskkwceG3Lql-y/exec";
+import { urls } from "./google-sheets.js";
+
+const GOOGLE_SCRIPT_URL = urls.googleSheets;
 
 document.getElementById("userForm").onsubmit = function (e) {
   e.preventDefault();
   const uuid = document.getElementById("uuid").value.trim();
 
+  const form = document.getElementById("userForm");
+
   if (!uuid) {
-    showError("Please enter a valid user ID");
+    showError("Please enter a valid user ID", form);
     return;
   }
 
-  const userNameDiv = document.getElementById("userName");
-  const continueButton = document.getElementById("continueButton");
-  userNameDiv.style.display = "none";
-  continueButton.style.display = "none";
-  document.getElementById("errorMessage").style.display = "none";
+  document.getElementById("errorMessage").innerHTML = "&nbsp;";
 
-  const script = document.createElement("script");
-  const callback = "callback_" + Date.now();
+  Array.from(form.elements).forEach((el) => (el.disabled = true));
+  document.getElementById("userFormSubmit").classList.add("loading");
 
-  window[callback] = function (response) {
-    if (response.success && response.name) {
-      userNameDiv.textContent = "Nombre: " + response.name;
-      userNameDiv.style.display = "block";
-      localStorage.setItem("userUuid", uuid);
-      localStorage.setItem("userName", response.name);
-      continueButton.style.display = "block";
-    } else {
-      showError(response.error || "User not found");
-    }
-    document.body.removeChild(script);
-    delete window[callback];
-  };
+  const body = new URLSearchParams({
+    action: "login",
+    uuid: uuid,
+  });
 
-  script.src = `${GOOGLE_SCRIPT_URL}?action=getName&uuid=${encodeURIComponent(
-    uuid
-  )}&callback=${callback}`;
-  document.body.appendChild(script);
+  fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
+    .then((res) => res.json())
+    .then((response) => {
+      if (response.success && response.name) {
+        console.log({ response });
+        localStorage.setItem("userUuid", uuid);
+        localStorage.setItem("userName", response.name);
+        localStorage.setItem("userSurname", response.surname);
+
+        window.location.href = "/page/form.html";
+      } else {
+        showError(response.error || "User not found", form);
+      }
+    })
+    .catch(() => {
+      showError("Error de conexión", form);
+    });
 };
 
-function showError(message) {
+function showError(message, form) {
   const errorElement = document.getElementById("errorMessage");
   errorElement.textContent = message;
-  errorElement.style.display = "block";
+
+  Array.from(form.elements).forEach((el) => (el.disabled = false));
+  document.getElementById("userFormSubmit").classList.remove("loading");
 }

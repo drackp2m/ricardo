@@ -1,0 +1,94 @@
+@import url("./colors.css");
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../asset/font/Quicksand-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../asset/font/Quicksand-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../asset/font/Quicksand-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../asset/font/Quicksand-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../asset/font/Quicksand-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+.font-xs {
+  font-size: 0.75em;
+}
+.font-sm {
+  font-size: 0.875em;
+}
+.font-md {
+  font-size: 1em;
+}
+.font-lg {
+  font-size: 1.125em;
+}
+.font-xl {
+  font-size: 1.25em;
+}
+.font-2xl {
+  font-size: 1.5em;
+}
+.font-3xl {
+  font-size: 1.75em;
+}
+
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.2em;
+}
+h4 {
+  font-size: 1.1em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 0.9em;
+}
+
+.success {
+  color: var(--success);
+}
+.warn {
+  color: var(--warning);
+}

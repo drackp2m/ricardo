@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule ^$ pages/index.html [L]
+RewriteRule ^$ page/index.html [L]
