@@ -1,10 +1,13 @@
 input {
-  width: 100%;
   padding: 8px;
   border: 1px solid rgba(256, 256, 256, 35%);
   border-radius: 4px;
   background-color: rgba(256, 256, 256, 60%);
   cursor: default;
+}
+
+input[type="text"] {
+  width: 100%;
 }
 
 input[disabled] {

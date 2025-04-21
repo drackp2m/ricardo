@@ -1,0 +1,82 @@
+import { urls } from "./config.js";
+import { getWeekDays } from "./utils.js";
+
+window.onload = function () {
+  const userUuid = localStorage.getItem("userUuid");
+  const name = localStorage.getItem("userName");
+  const surname = localStorage.getItem("userSurname");
+
+  if (!userUuid || !name || !surname) {
+    window.location.href = "/index.html";
+    return;
+  }
+
+  document.getElementById("displayName").textContent = `${name} ${surname}`;
+
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("date").value = today;
+
+  const GOOGLE_SCRIPT_URL = urls.googleSheets;
+
+  document.getElementById("registerEntry").onsubmit = function (e) {
+    e.preventDefault();
+
+    const date = document.getElementById("date").value.trim();
+    const entryTime = document.getElementById("entryTime").value.trim();
+    const exitTime = document.getElementById("exitTime").value.trim();
+
+    document.getElementById("errorMessage").innerHTML = "&nbsp;";
+
+    const form = document.getElementById("registerEntry");
+
+    Array.from(form.elements).forEach((el) => (el.disabled = true));
+    document.getElementById("registerEntrySubmit").classList.add("loading");
+
+    const body = new URLSearchParams({
+      action: "registerEntry",
+      userUuid: userUuid,
+      date,
+      entryTime,
+      exitTime,
+    });
+
+    fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log({ response });
+
+        if (response.success) {
+        } else {
+          showError(response.error || "Unknown error", form);
+        }
+      })
+      .catch(() => {
+        showError("Connection error", form);
+      });
+  };
+
+  document.getElementById("check").onclick = function () {
+    const { from, to } = getWeekDays();
+
+    const body = new URLSearchParams({
+      action: "getEntriesBetweenDates",
+      userUuid,
+      from,
+      to,
+    });
+
+    fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log({ response });
+      });
+  };
+
+  function showError(message, form) {
+    const errorElement = document.getElementById("errorMessage");
+    errorElement.textContent = message;
+
+    Array.from(form.elements).forEach((el) => (el.disabled = false));
+    document.getElementById("registerEntrySubmit").classList.remove("loading");
+  }
+};

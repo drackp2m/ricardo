@@ -8,71 +8,57 @@
     <title>Control de Horario</title>
   </head>
   <body>
-    <form id="horariosForm" class="card" onsubmit="enviarDatos(event)">
+    <form id="registerEntry" class="card">
       <div class="header px-4 py-2">
         <h3>Welcome <span id="displayName"></span></h3>
       </div>
 
       <div class="body flex-col gap-4 px-4 pt-3 pb-4">
         <div class="form-group">
-          <label for="fecha">Fecha:</label>
+          <label for="date">Date:</label>
           <input
             type="date"
-            id="fecha"
-            name="fecha"
+            id="date"
+            name="date"
             required
             value="2025-04-09"
           />
         </div>
 
         <div class="form-group">
-          <label for="entrada">Hora de entrada:</label>
+          <label for="entryTime">Entry time:</label>
           <input
             type="time"
-            id="entrada"
-            name="entrada"
+            id="entryTime"
+            name="entryTime"
             required
             value="12:00"
           />
         </div>
 
         <div class="form-group">
-          <label for="salida">Hora de salida:</label>
-          <input type="time" id="salida" name="salida" required value="17:00" />
+          <label for="exitTime">Exit time:</label>
+          <input type="time" id="exitTime" name="exitTime" required value="17:00" />
         </div>
+
+        <p id="errorMessage" class="warn font-sm text-right">&nbsp;</p>
       </div>
 
       <div class="footer p-4 pt-0 flex-row justify-between">
         <button
           type="button"
           class="button-back"
-          onclick="window.location.href='index.html'"
+          onclick="window.location.href='/index.html'"
         >
           Back
         </button>
 
-        <button type="submit" class="button-submit">Send</button>
+        <button type="button" id="check">Check</button>
+        
+        <button type="submit" id="registerEntrySubmit">Send</button>
       </div>
     </form>
-    <div id="errorMessage" class="error-message"></div>
 
-    <script>
-      window.onload = function () {
-        const uuid = localStorage.getItem("userUuid");
-        const name = localStorage.getItem("userName");
-        const surname = localStorage.getItem("userSurname");
-
-        if (!uuid || !name) {
-          window.location.href = "index.html";
-          return;
-        }
-        document.getElementById(
-          "displayName"
-        ).textContent = `${name} ${surname}`;
-
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("fecha").value = today;
-      };
-    </script>
+    <script type="module" src="../script/form.js"></script>
   </body>
 </html>
