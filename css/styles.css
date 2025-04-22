@@ -82,17 +82,16 @@ button {
     to { transform: rotate(360deg); }
 }
 
-button.loading::before {
+.loading::before {
     content: "";
 
     display: inline-block;
     width: 1em;
     height: 1em;
-    border: 2px solid #fff;
+    border: 2px solid;
     border-top: 2px solid transparent;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
-    margin-right: 0.5em;
     vertical-align: middle;
 }
 

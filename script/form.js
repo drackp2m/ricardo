@@ -43,9 +43,20 @@ window.onload = function () {
     fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
       .then((res) => res.json())
       .then((response) => {
-        console.log({ response });
-
         if (response.success) {
+          document
+            .getElementById("registerEntrySubmit")
+            .classList.remove("loading");
+          document.getElementById("registerEntry").reset();
+          document.getElementById("errorMessage").textContent =
+            "Entry registered successfully!";
+          document.getElementById("errorMessage").style.color = "green";
+          setTimeout(() => {
+            document.getElementById("errorMessage").textContent = "&nbsp;";
+          }, 3000);
+          document.getElementById("errorMessage").style.color = "inherit";
+          Array.from(form.elements).forEach((el) => (el.disabled = false));
+        } else if (response.error === "entryAlreadyExists") {
         } else {
           showError(response.error || "Unknown error", form);
         }

@@ -14,3 +14,14 @@ input[disabled] {
   background-color: rgba(256, 256, 256, 30%);
   color: rgba(0, 0, 0, 35%);
 }
+
+input[type="checkbox"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="checkbox"]:checked::before {
+  content: "✔";
+  position: absolute;
+}

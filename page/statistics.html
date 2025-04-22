@@ -14,19 +14,29 @@
       </div>
 
       <div class="body flex-col gap-4 px-4 pt-3 pb-4">
-        Loading statistics...
+        <p class="loading flex-row align-center gap-2">Loading statistics...</p>
+
+        <div class="week-info">
+          <strong>Week 17</strong> (Apr 21, 2025 – Apr 27, 2025)
+        </div>
 
         <label class="flex-row gap-2 align-center">
-          <input type="checkbox" id="chartModeToggle" checked> Show as bar chart
+          <input type="checkbox" id="showWorkedHours" /> Show worked hours
         </label>
-        
+
         <canvas id="myChart" height="300"></canvas>
       </div>
 
-      <div class="footer p-4 pt-0 flex-row justify-between"></div>
+      <div class="footer p-4 pt-0 flex-row justify-between">
+        <button type="button" id="previousWeek">
+          Previous Week
+        </button>
+        <button type="button" id="nextWeek">
+          Next Week
+      </div>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="../script/statistics.js"></script>
+    <script type="module" src="../script/statistics/main.js"></script>
   </body>
 </html>
