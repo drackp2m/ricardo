@@ -1,0 +1,5 @@
+@import url('/style.css');
+
+input#userUuid {
+  min-width: 380px;
+}

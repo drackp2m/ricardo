@@ -1,6 +1,6 @@
 const googleSheetsID =
-  "AKfycbwGkQZ9xAwJSa08iJBcbrz0zi7XXsD43VZO0d10vDzSOvO-uFyGzg7ezPsnh4k5QjUh";
+  "AKfycbxcHeSPTXYzNcYJMjVhXMMSjfqu2RaBkAZY4nKwj6vPs_5u2vNC_PCKDDfJOzrbWffc";
 
-export const urls = {
+export const url = {
   googleSheets: `https://script.google.com/macros/s/${googleSheetsID}/exec`,
 };

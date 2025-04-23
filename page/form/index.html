@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;," />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Clock in - Ricardo Gelats</title>
+  </head>
+
+  <body class="flex-col justify-center align-center p-4 pb-16">
+    <form id="registerEntry" class="card">
+      <div class="header px-4 py-2">
+        <h3>Welcome <span id="displayName"></span></h3>
+      </div>
+
+      <div class="body flex-col gap-4 px-4 pt-3 pb-4">
+        <div class="flex-row justify-between gap-4">
+          <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required value="2025-04-09" />
+          </div>
+
+          <div class="form-group flex-col flex-grow">
+            <label for="entryTime">Entry time:</label>
+            <input type="time" id="entryTime" name="entryTime" required value="12:00" />
+          </div>
+
+          <div class="form-group flex-col flex-grow">
+            <label for="exitTime">Exit time:</label>
+            <input type="time" id="exitTime" name="exitTime" required value="17:00" />
+          </div>
+        </div>
+        <p id="errorMessage" class="warn font-sm text-right">&nbsp;</p>
+      </div>
+
+      <div class="footer p-4 pt-0 flex-row justify-between align-center">
+        <a href="/page/statistics">Go to statistics</a>
+
+        <button type="submit" id="registerEntrySubmit" class="flex-row align-center gap-2">
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

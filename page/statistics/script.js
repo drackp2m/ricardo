@@ -1,5 +1,6 @@
-import { urls } from "../config.js";
-import { getWeekDays, getWeekNumber } from "../utils.js";
+import '/script.js';
+import 'https://cdn.jsdelivr.net/npm/chart.js';
+
 import { fetchPage } from './utils.js';
 
 window.onload = async function () {

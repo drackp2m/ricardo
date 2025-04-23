@@ -1,5 +1,6 @@
-import { urls } from "./config.js";
-import { getWeekDays } from "./utils.js";
+import '/script.js';
+
+import { url } from "/script/config.js";
 
 window.onload = function () {
   const userUuid = localStorage.getItem("userUuid");
@@ -16,7 +17,7 @@ window.onload = function () {
   const today = new Date().toISOString().split("T")[0];
   document.getElementById("date").value = today;
 
-  const GOOGLE_SCRIPT_URL = urls.googleSheets;
+  const GOOGLE_SCRIPT_URL = url.googleSheets;
 
   document.getElementById("registerEntry").onsubmit = function (e) {
     e.preventDefault();
@@ -25,7 +26,7 @@ window.onload = function () {
     const entryTime = document.getElementById("entryTime").value.trim();
     const exitTime = document.getElementById("exitTime").value.trim();
 
-    document.getElementById("errorMessage").innerHTML = "&nbsp;";
+    document.getElementById("errorMessage").innerHTML = " ";
 
     const form = document.getElementById("registerEntry");
 
@@ -63,23 +64,6 @@ window.onload = function () {
       })
       .catch(() => {
         showError("Connection error", form);
-      });
-  };
-
-  document.getElementById("check").onclick = function () {
-    const { from, to } = getWeekDays();
-
-    const body = new URLSearchParams({
-      action: "getEntriesBetweenDates",
-      userUuid,
-      from,
-      to,
-    });
-
-    fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
-      .then((res) => res.json())
-      .then((response) => {
-        console.log({ response });
       });
   };
 

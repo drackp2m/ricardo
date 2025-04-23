@@ -6,6 +6,10 @@ input {
   cursor: default;
 }
 
+input::placeholder {
+  color: rgba(0, 0, 0, 35%);
+}
+
 input[type="text"] {
   width: 100%;
 }

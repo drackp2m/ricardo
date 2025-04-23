@@ -1,8 +1,8 @@
-import { urls } from "../config.js";
-import { getWeekNumber, getWeekDays } from "../utils.js";
+import { url } from "/script/config.js";
+import { getWeekNumber, getWeekDays } from "/script/utils.js";
 
 export async function fetchPage(pageNumber, forceFetch = false) {
-  const GOOGLE_SCRIPT_URL = urls.googleSheets;
+  const GOOGLE_SCRIPT_URL = url.googleSheets;
   const userUuid = localStorage.getItem("userUuid");
 
   if (!userUuid) {

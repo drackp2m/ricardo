@@ -1,4 +1,5 @@
 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+	<title>ice-cream-cookie-pattern</title>
 	<style>
 		.s0 { fill: #e7b86c } 
 		.s1 { fill: #eac787 } 
@@ -6,19 +7,19 @@
 		.s3 { fill: #dc923a } 
 		.s4 { fill: #d98a2d } 
 	</style>
-	<g id="Layer 1" >
-		<path id="Shape 1 copy 7" fill-rule="evenodd" class="s0" d="m400 400h-400v-400h400z"/>
-		<path id="Shape 1" fill-rule="evenodd" class="s1" d="m169.8 200l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 3" fill-rule="evenodd" class="s2" d="m-113-82.8l282.8 282.8h-565.6z"/>
-		<path id="Shape 1 copy 4" fill-rule="evenodd" class="s0" d="m109.8 200l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 1 copy" fill-rule="evenodd" class="s3" d="m795.8 200l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 1 copy 10" fill-rule="evenodd" class="s4" d="m513 482.8l-282.8-282.8h565.6z"/>
-		<path id="Shape 1 copy 5" fill-rule="evenodd" class="s0" d="m855.8 200l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 1 copy 2" fill-rule="evenodd" class="s4" d="m482.8-113l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 2" fill-rule="evenodd" class="s1" d="m482.8-113l-282.8 282.8v-565.6z"/>
-		<path id="Shape 1 copy 3" fill-rule="evenodd" class="s2" d="m482.8 513l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 1 copy 9" fill-rule="evenodd" class="s3" d="m-82.8 513l282.8-282.8v565.6z"/>
-		<path id="Shape 1 copy 6" fill-rule="evenodd" class="s0" d="m482.8 573l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
-		<path id="Shape 1 copy 8" fill-rule="evenodd" class="s0" d="m482.8-173l-282.8 282.8-282.8-282.8 282.8-282.8z"/>
+	<g id="Layer 1">
+		<path id="Shape 1 copy 7" fill-rule="evenodd" class="s0" d="m0 400v-400h400v400z"/>
+		<path id="Shape 1" fill-rule="evenodd" class="s1" d="m230.2 200l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 3" fill-rule="evenodd" class="s2" d="m513 482.8l-282.8-282.8h565.6z"/>
+		<path id="Shape 1 copy 4" fill-rule="evenodd" class="s0" d="m290.2 200l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 1 copy" fill-rule="evenodd" class="s3" d="m-395.8 200l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 1 copy 10" fill-rule="evenodd" class="s4" d="m-113-82.8l282.8 282.8h-565.6z"/>
+		<path id="Shape 1 copy 5" fill-rule="evenodd" class="s0" d="m-455.8 200l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 1 copy 2" fill-rule="evenodd" class="s4" d="m-82.8 513l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 2" fill-rule="evenodd" class="s1" d="m-82.8 513l282.8-282.8v565.6z"/>
+		<path id="Shape 1 copy 3" fill-rule="evenodd" class="s2" d="m-82.8-113l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 1 copy 9" fill-rule="evenodd" class="s3" d="m482.8-113l-282.8 282.8v-565.6z"/>
+		<path id="Shape 1 copy 6" fill-rule="evenodd" class="s0" d="m-82.8-173l282.8-282.8 282.8 282.8-282.8 282.8z"/>
+		<path id="Shape 1 copy 8" fill-rule="evenodd" class="s0" d="m-82.8 573l282.8-282.8 282.8 282.8-282.8 282.8z"/>
 	</g>
 </svg>
