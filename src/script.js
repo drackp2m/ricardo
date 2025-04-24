@@ -49,7 +49,7 @@ import { url } from './script/config.js';
       sessionStorage.setItem('initialRedirect', 'true');
 
       if (location.pathname !== url.basePathname) {
-        location.href = url.basePathname;
+        window.location.href = url.basePathname;
       }
     }
   }
