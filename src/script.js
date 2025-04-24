@@ -48,8 +48,8 @@ import { url } from './script/config.js';
     if (initialRedirectCompleted === false) {
       sessionStorage.setItem('initialRedirect', 'true');
 
-      if (location.pathname !== basePathname) {
-        location.href = basePathname;
+      if (location.pathname !== url.basePathname) {
+        location.href = url.basePathname;
       }
     }
   }
