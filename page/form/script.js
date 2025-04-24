@@ -1,6 +1,6 @@
-import '/script.js';
+import '../../script.js';
 
-import { url } from "/script/config.js";
+import { url } from "../../script/config.js";
 
 window.onload = function () {
   const userUuid = localStorage.getItem("userUuid");

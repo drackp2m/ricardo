@@ -1,4 +1,4 @@
-import '/script.js';
+import '../../script.js';
 import 'https://cdn.jsdelivr.net/npm/chart.js';
 
 import { fetchPage } from './utils.js';

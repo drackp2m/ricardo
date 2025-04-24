@@ -1,5 +1,4 @@
 :root {
-  /* Espacios pequeños: incremento de 0.25rem */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -8,7 +7,7 @@
   --space-6: 1.5rem;
   --space-7: 1.75rem;
   --space-8: 2rem;
-  /* Espacios medianos: incremento de 0.5rem */
+
   --space-9: 2.5rem;
   --space-10: 3rem;
   --space-11: 3.5rem;
@@ -17,7 +16,7 @@
   --space-14: 5rem;
   --space-15: 5.5rem;
   --space-16: 6rem;
-  /* Espacios grandes: incremento de 1rem */
+
   --space-17: 7rem;
   --space-18: 8rem;
   --space-19: 9rem;
@@ -26,7 +25,7 @@
   --space-22: 12rem;
   --space-23: 13rem;
   --space-24: 14rem;
-  /* Espacios extra grandes: incremento de 2rem */
+
   --space-25: 16rem;
   --space-26: 18rem;
   --space-27: 20rem;
