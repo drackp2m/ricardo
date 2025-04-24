@@ -1,5 +1,5 @@
-import { url } from "/script/config.js";
-import { getWeekNumber, getWeekDays } from "/script/utils.js";
+import { url } from "../../script/config.js";
+import { getWeekNumber, getWeekDays } from "../../script/utils.js";
 
 export async function fetchPage(pageNumber, forceFetch = false) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;

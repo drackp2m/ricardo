@@ -1,4 +1,4 @@
-import { url } from "../../script/config.js";
+import { url } from "../config.js";
 
 export const login = async (userUuid) => {
   const body = new URLSearchParams({
