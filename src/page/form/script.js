@@ -1,77 +1,73 @@
-import '../../script.js';
+import { mainReady } from '../../script.js';
+import { url } from '../../script/config.js';
 
-import { url } from "../../script/config.js";
-
-window.onload = function () {
-  const userUuid = localStorage.getItem("userUuid");
-  const name = localStorage.getItem("userName");
-  const surname = localStorage.getItem("userSurname");
+mainReady.then(() => {
+  const userUuid = localStorage.getItem('userUuid');
+  const name = localStorage.getItem('userName');
+  const surname = localStorage.getItem('userSurname');
 
   if (!userUuid || !name || !surname) {
-    window.location.href = "/index.html";
+    window.location.href = url.basePathname;
     return;
   }
 
-  document.getElementById("displayName").textContent = `${name} ${surname}`;
+  document.getElementById('displayName').textContent = `${name} ${surname}`;
 
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("date").value = today;
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').value = today;
 
   const GOOGLE_SCRIPT_URL = url.googleSheets;
 
-  document.getElementById("registerEntry").onsubmit = function (e) {
+  document.getElementById('registerEntry').onsubmit = function (e) {
     e.preventDefault();
 
-    const date = document.getElementById("date").value.trim();
-    const entryTime = document.getElementById("entryTime").value.trim();
-    const exitTime = document.getElementById("exitTime").value.trim();
+    const date = document.getElementById('date').value.trim();
+    const entryTime = document.getElementById('entryTime').value.trim();
+    const exitTime = document.getElementById('exitTime').value.trim();
 
-    document.getElementById("errorMessage").innerHTML = " ";
+    document.getElementById('errorMessage').innerHTML = ' ';
 
-    const form = document.getElementById("registerEntry");
+    const form = document.getElementById('registerEntry');
 
     Array.from(form.elements).forEach((el) => (el.disabled = true));
-    document.getElementById("registerEntrySubmit").classList.add("loading");
+    document.getElementById('registerEntrySubmit').classList.add('loading');
 
     const body = new URLSearchParams({
-      action: "registerEntry",
+      action: 'registerEntry',
       userUuid: userUuid,
       date,
       entryTime,
       exitTime,
     });
 
-    fetch(`${GOOGLE_SCRIPT_URL}`, { method: "POST", body })
+    fetch(`${GOOGLE_SCRIPT_URL}`, { method: 'POST', body })
       .then((res) => res.json())
       .then((response) => {
         if (response.success) {
-          document
-            .getElementById("registerEntrySubmit")
-            .classList.remove("loading");
-          document.getElementById("registerEntry").reset();
-          document.getElementById("errorMessage").textContent =
-            "Entry registered successfully!";
-          document.getElementById("errorMessage").style.color = "green";
+          document.getElementById('registerEntrySubmit').classList.remove('loading');
+          document.getElementById('registerEntry').reset();
+          document.getElementById('errorMessage').textContent = 'Entry registered successfully!';
+          document.getElementById('errorMessage').style.color = 'green';
           setTimeout(() => {
-            document.getElementById("errorMessage").textContent = "&nbsp;";
+            document.getElementById('errorMessage').textContent = '&nbsp;';
           }, 3000);
-          document.getElementById("errorMessage").style.color = "inherit";
+          document.getElementById('errorMessage').style.color = 'inherit';
           Array.from(form.elements).forEach((el) => (el.disabled = false));
-        } else if (response.error === "entryAlreadyExists") {
+        } else if (response.error === 'entryAlreadyExists') {
         } else {
-          showError(response.error || "Unknown error", form);
+          showError(response.error || 'Unknown error', form);
         }
       })
       .catch(() => {
-        showError("Connection error", form);
+        showError('Connection error', form);
       });
   };
 
   function showError(message, form) {
-    const errorElement = document.getElementById("errorMessage");
+    const errorElement = document.getElementById('errorMessage');
     errorElement.textContent = message;
 
     Array.from(form.elements).forEach((el) => (el.disabled = false));
-    document.getElementById("registerEntrySubmit").classList.remove("loading");
+    document.getElementById('registerEntrySubmit').classList.remove('loading');
   }
-};
+});

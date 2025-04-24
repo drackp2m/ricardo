@@ -1,11 +1,11 @@
 import 'https://cdn.jsdelivr.net/npm/chart.js';
-import '../../script.js';
 
+import { mainReady } from '../../script.js';
 import { fetchPage } from './utils.js';
 
-window.onload = async function () {
+mainReady.then(async () => {
   let currentMode = 'range';
-  const ctx = document.getElementById("myChart").getContext("2d");
+  const ctx = document.getElementById('myChart').getContext('2d');
   let chartInstance = null;
 
   let actualPage = 0;
@@ -15,30 +15,30 @@ window.onload = async function () {
   let dataModes = { range: entries, total: entries };
 
   chartLabels = entries.map((entry) =>
-    new Date(entry.date).toLocaleDateString("en-US", {
-      weekday: "short",
+    new Date(entry.date).toLocaleDateString('en-US', {
+      weekday: 'short',
     })
   );
 
   dataModes = {
     range: entries.map((entry) => {
-      return getInOut(entry, "range");
+      return getInOut(entry, 'range');
     }),
     total: entries.map((entry) => {
-      return getInOut(entry, "total");
+      return getInOut(entry, 'total');
     }),
   };
 
   renderChart(dataModes, chartLabels, entries);
 
-  document.getElementById("showWorkedHours").addEventListener("change", (e) => {
-    currentMode = e.target.checked ? "total" : "range";
+  document.getElementById('showWorkedHours').addEventListener('change', (e) => {
+    currentMode = e.target.checked ? 'total' : 'range';
 
     renderChart(dataModes, chartLabels, entries);
   });
 
   function getMinMax(mode, dataModes) {
-    if (mode === "range") {
+    if (mode === 'range') {
       const all = dataModes.range.flat().filter((x) => x !== null);
       return [Math.floor(Math.min(...all)), Math.ceil(Math.max(...all))];
     } else {
@@ -52,34 +52,34 @@ window.onload = async function () {
     let outDec = parseHourToDecimal(entry.out);
 
     if (inDec === null || outDec === null) {
-      return mode == "range" ? [null, null] : null;
+      return mode == 'range' ? [null, null] : null;
     }
 
     if (outDec < inDec) {
       outDec += 24;
     }
 
-    return mode == "range" ? [inDec, outDec] : outDec - inDec;
+    return mode == 'range' ? [inDec, outDec] : outDec - inDec;
   }
 
   function renderChart(dataModes, labels, entries) {
     let datasets = [];
 
-    if (currentMode === "range") {
+    if (currentMode === 'range') {
       datasets = [
         {
-          label: "In/Out",
+          label: 'In/Out',
           data: dataModes.range,
-          backgroundColor: "rgba(67,176,71,0.7)",
+          backgroundColor: 'rgba(67,176,71,0.7)',
           borderRadius: 0,
         },
       ];
     } else {
       datasets = [
         {
-          label: "Worked",
+          label: 'Worked',
           data: dataModes.total,
-          backgroundColor: "rgba(67,176,71,0.7)",
+          backgroundColor: 'rgba(67,176,71,0.7)',
           borderRadius: 0,
         },
       ];
@@ -87,15 +87,17 @@ window.onload = async function () {
 
     const [minHour, maxHour] = getMinMax(currentMode, dataModes);
 
+    document.getElementById('loading').style.display = 'none';
+
     if (!chartInstance) {
       chartInstance = new Chart(ctx, {
-        type: "bar",
+        type: 'bar',
         data: {
           labels,
           datasets,
         },
         options: {
-          indexAxis: "x",
+          indexAxis: 'x',
           animation: {
             duration: 400,
             delay: function (context) {
@@ -108,16 +110,16 @@ window.onload = async function () {
               callbacks: {
                 title: function (context) {
                   const date = new Date(entries[context[0].dataIndex].date);
-                  const formatted = date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
+                  const formatted = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
                   });
 
                   return formatted;
                 },
                 label: function (context) {
-                  if (currentMode == "range") {
+                  if (currentMode == 'range') {
                     const [start, end] = context.raw;
 
                     return `In ${formatHour(start)}, out ${formatHour(end)}`;
@@ -139,7 +141,7 @@ window.onload = async function () {
               max: maxHour,
               ticks: {
                 callback: (val, idx, ticks) => {
-                  if (currentMode === "range") {
+                  if (currentMode === 'range') {
                     if (ticks.length <= 2) {
                       return Math.floor(val).toString();
                     }
@@ -150,7 +152,7 @@ window.onload = async function () {
 
                     return Math.floor(val).toString();
                   } else {
-                    return val + "h";
+                    return val + 'h';
                   }
                 },
                 stepSize: 2,
@@ -172,20 +174,37 @@ window.onload = async function () {
 
   function formatHour(d) {
     if (d == null) {
-      return "-";
+      return '-';
     }
 
-    const sign = d < 0 ? "-" : "";
+    const sign = d < 0 ? '-' : '';
     d = Math.abs(d);
     const h = Math.floor(d);
     const m = Math.round((d % 1) * 60);
 
-    return `${sign}${h}:${m.toString().padStart(2, "0")}`;
+    return `${sign}${h}:${m.toString().padStart(2, '0')}`;
   }
 
   function parseHourToDecimal(hhmm) {
     if (!hhmm) return null;
-    const [h, m] = hhmm.split(":").map(Number);
+    const [h, m] = hhmm.split(':').map(Number);
     return h + m / 60;
   }
-};
+
+  const loadingPlugin = {
+    id: 'loadingText',
+    beforeDraw: (chart) => {
+      if (!chart.data.datasets.length || !chart.data.datasets[0].data.length) {
+        const ctx = chart.ctx;
+        const { width, height } = chart;
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '20px Quicksand, Arial, sans-serif';
+        ctx.fillStyle = '#888';
+        ctx.fillText('Cargando…', width / 2, height / 2);
+        ctx.restore();
+      }
+    }
+  };
+});

@@ -1,13 +1,28 @@
 import { url } from "../../script/config.js";
 import { getWeekNumber, getWeekDays } from "../../script/utils.js";
 
+/**
+ * @typedef {Object} PageData
+ * @property {string} date
+ * @property {string|null} estimatedArrival
+ * @property {string|null} in
+ * @property {string|null} out
+ * @property {string|null} break
+ * @property {string|null} total
+ */
+
+/**
+ * @param {number} pageNumber
+ * @param {boolean} [forceFetch]
+ * @returns {Promise<PageData[]>}
+ */
 export async function fetchPage(pageNumber, forceFetch = false) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
   const userUuid = localStorage.getItem("userUuid");
 
   if (!userUuid) {
-    window.location.href = "/index.html";
-    return;
+    window.location.href = url.basePathname;
+    return [];
   }
 
   if (!window.pageCache) {

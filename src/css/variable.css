@@ -32,4 +32,19 @@
   --space-28: 22rem;
   --space-29: 24rem;
   --space-30: 26rem;
+
+  --font-xs: 0.75em;
+  --font-sm: 0.875em;
+  --font-md: 1em;
+  --font-lg: 1.125em;
+  --font-xl: 1.25em;
+  --font-2xl: 1.5em;
+  --font-3xl: 1.75em;
+
+  --color-success: #388e3c;
+  --color-warning: #d32f2f;
+
+  --color-primary: #4CAF50;
+  --color-primary-contrast: #fff;
+  --color-primary-hover: #45a049;
 }

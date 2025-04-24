@@ -1,8 +1,7 @@
-import '../../script.js';
-
+import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
 
-window.onload = function () {
+mainReady.then(() => {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
 
   document.getElementById('userForm').onsubmit = function (e) {
@@ -52,4 +51,4 @@ window.onload = function () {
     Array.from(form.elements).forEach((el) => (el.disabled = false));
     document.getElementById('userFormSubmit').classList.remove('loading');
   }
-};
+});
