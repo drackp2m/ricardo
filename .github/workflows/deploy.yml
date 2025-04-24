@@ -1,9 +1,18 @@
-name: Deploy Ricargo Gelats to GitHub Pages
+name: deploy
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'deploy'
+  cancel-in-progress: true
 
 jobs:
   deploy:
