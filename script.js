@@ -5,8 +5,7 @@ import { url } from './script/config.js';
   executeFirstRedirectIfNeeded();
 
   document.addEventListener('DOMContentLoaded', async function () {
-    const basePathname = url.basePathname;
-    const isLocationBasePathname = this.location.pathname === basePathname;
+    const isLocationBasePathname = this.location.pathname === url.basePathname;
     const initialSessionActiveChecked = sessionStorage.getItem('initialSessionActive') !== null;
 
     // ToDo => check this when implements logout feature
@@ -19,10 +18,10 @@ import { url } from './script/config.js';
       const localStorageUserUuid = localStorage.getItem('userUuid');
 
       const missingLocalStorageUserUuid = localStorageUserUuid === null;
-      const isLocationPageLogin = location.pathname !== `${basePathname}page/login`;
+      const isLocationPageLogin = location.pathname !== `${url.basePathname}page/login`;
 
       if (missingLocalStorageUserUuid && isLocationPageLogin) {
-        window.location.href = `${basePathname}page/login`;
+        window.location.href = `${url.basePathname}page/login`;
         return;
       }
 
@@ -36,9 +35,9 @@ import { url } from './script/config.js';
         localStorage.setItem('userName', user.name);
         localStorage.setItem('userSurname', user.surname);
 
-        window.location.href = `${basePathname}page/form`;
+        window.location.href = `${url.basePathname}page/form`;
       } catch (error) {
-        window.location.href = `${basePathname}page/login`;
+        window.location.href = `${url.basePathname}page/login`;
       }
     }
   });
