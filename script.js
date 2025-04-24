@@ -1,10 +1,12 @@
 import { GoogleSheets } from './script/google-sheets/main.js';
+import { url } from './script/config.js';
 
 (function () {
   executeFirstRedirectIfNeeded();
 
   document.addEventListener('DOMContentLoaded', async function () {
-    const isLocationBasePathname = this.location.pathname === '/';
+    const basePathname = url.basePathname;
+    const isLocationBasePathname = this.location.pathname === basePathname;
     const initialSessionActiveChecked = sessionStorage.getItem('initialSessionActive') !== null;
 
     // ToDo => check this when implements logout feature
@@ -17,10 +19,10 @@ import { GoogleSheets } from './script/google-sheets/main.js';
       const localStorageUserUuid = localStorage.getItem('userUuid');
 
       const missingLocalStorageUserUuid = localStorageUserUuid === null;
-      const isLocationPageLogin = location.pathname !== '/page/login';
+      const isLocationPageLogin = location.pathname !== `${basePathname}page/login`;
 
       if (missingLocalStorageUserUuid && isLocationPageLogin) {
-        window.location.href = '/page/login';
+        window.location.href = `${basePathname}page/login`;
         return;
       }
 
@@ -34,9 +36,9 @@ import { GoogleSheets } from './script/google-sheets/main.js';
         localStorage.setItem('userName', user.name);
         localStorage.setItem('userSurname', user.surname);
 
-        window.location.href = '/page/form';
+        window.location.href = `${basePathname}page/form`;
       } catch (error) {
-        window.location.href = '/page/login';
+        window.location.href = `${basePathname}page/login`;
       }
     }
   });
@@ -47,8 +49,8 @@ import { GoogleSheets } from './script/google-sheets/main.js';
     if (initialRedirectCompleted === false) {
       sessionStorage.setItem('initialRedirect', 'true');
 
-      if (location.pathname !== '/') {
-        location.href = '/';
+      if (location.pathname !== basePathname) {
+        location.href = basePathname;
       }
     }
   }

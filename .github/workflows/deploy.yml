@@ -24,9 +24,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Replace base href for Github Pages
+      - name: Replace html base href
         run: |
           find . -name "*.html" -exec sed -i 's|<base href="/"|<base href="/ricardo/"|g' {} +
+
+      - name: Replace js base pathname
+        run: |
+          find . -name "*.js" -exec sed -i "s|basePathname: '/'|basePathname: '/ricardo/'|g" {} +
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

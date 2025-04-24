@@ -26,7 +26,7 @@ body::before {
     left: -100vw;
     width: 300vw;
     height: 300vh;
-    background-image: url('../asset/vector/noise-effect.svg'), url('../asset/vector/ice-cream-cookie-pattern.svg');
+    background-image: url('./asset/vector/noise-effect.svg'), url('./asset/vector/ice-cream-cookie-pattern.svg');
     background-repeat: repeat, repeat;
     background-size: 46px, 46px;
     background-position: 0 0, -6px 36px;
@@ -51,7 +51,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../asset/vector/noise-effect.svg');
+    background-image: url('./asset/vector/noise-effect.svg');
     background-repeat: repeat;
     background-size: 46px;
     opacity: 0.6;
