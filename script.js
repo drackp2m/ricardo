@@ -1,8 +1,6 @@
 import { GoogleSheets } from './script/google-sheets/main.js';
 
 (function () {
-  insertBaseHrefOnHead();
-
   executeFirstRedirectIfNeeded();
 
   document.addEventListener('DOMContentLoaded', async function () {
@@ -42,14 +40,6 @@ import { GoogleSheets } from './script/google-sheets/main.js';
       }
     }
   });
-
-  function insertBaseHrefOnHead() {
-    const isLocalEnvironment =
-      location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-    const baseHref = isLocalEnvironment ? '/' : '/ricardo/';
-
-    document.head.insertAdjacentHTML('afterbegin', `<base href="${baseHref}">`);
-  }
 
   function executeFirstRedirectIfNeeded() {
     const initialRedirectCompleted = sessionStorage.getItem('initialRedirect') !== null;
