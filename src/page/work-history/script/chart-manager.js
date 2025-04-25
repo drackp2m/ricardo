@@ -88,7 +88,7 @@ export class ChartManager {
     }
 
     const sign = decimalHour < 0 ? '-' : '';
-    decimalHour = Math.abs(decimalHour);
+    decimalHour = Math.abs(decimalHour) % 24;
     const hours = Math.floor(decimalHour);
     const minutes = Math.round((decimalHour % 1) * 60);
 
@@ -160,9 +160,9 @@ export class ChartManager {
             min: minHour,
             max: maxHour,
             ticks: {
-              callback: (val, idx, ticks) => {
+              callback: (val) => {
                 if (this.mode === 'range') {
-                  return Math.floor(val).toString();
+                  return (Math.floor(val) % 24).toString();
                 } else {
                   return val + 'h';
                 }
