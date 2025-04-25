@@ -1,9 +1,9 @@
 /**
- * @param {number} weekOffset 
- * @param {boolean} toTodayOnly 
+ * @param {number} weekOffset
+ * @param {boolean} toTodayOnly
  * @returns {{ from: string, to: string }}
  */
-export function getWeekDays(weekOffset = 0, toTodayOnly = false) {
+export function getWeekDaysByOffset(weekOffset = 0, toTodayOnly = false) {
   const today = new Date();
   const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay();
 
@@ -23,13 +23,13 @@ export function getWeekDays(weekOffset = 0, toTodayOnly = false) {
     from: formatDateToISO8601(monday),
     to: formatDateToISO8601(sunday),
   };
-};
+}
 
 /**
- * @param {Date} date 
+ * @param {Date} date
  * @returns {number}
  */
-export function getWeekNumber(date) {
+export function getWeekNumberByDate(date) {
   const day = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = day.getUTCDay() || 7;
 
@@ -50,7 +50,7 @@ export function getWeekRangeFromYearAndWeek(year, week) {
   const referenceDate = new Date(year, 0, 1 + (week - 1) * 7);
   const dayOfWeek = referenceDate.getDay();
   const ISOWeekStart = new Date(referenceDate);
-  
+
   if (dayOfWeek <= 4) {
     ISOWeekStart.setDate(referenceDate.getDate() - referenceDate.getDay() + 1);
   } else {
@@ -64,6 +64,27 @@ export function getWeekRangeFromYearAndWeek(year, week) {
     from: formatDateToISO8601(ISOWeekStart),
     to: formatDateToISO8601(ISOweekEnd),
   };
+}
+
+/**
+ * @param {number} year
+ * @returns {number}
+ */
+export function getWeeksNumberByYear(year) {
+  function getWeekYear(date) {
+    date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+
+    return date.getUTCFullYear();
+  }
+
+  let date = new Date(Date.UTC(year, 11, 31));
+
+  while (getWeekYear(date) !== year) {
+    date.setUTCDate(date.getUTCDate() - 1);
+  }
+  
+  return getWeekNumberByDate(date);
 }
 
 /**

@@ -41,6 +41,16 @@
   --font-2xl: 1.5em;
   --font-3xl: 1.75em;
 
+  --weight-sm: 300;
+  --weight-md: 400;
+  --weight-lg: 500;
+  --weight-xl: 600;
+  --weight-2xl: 700;
+
+  --color-glass-sm: rgba(255, 255, 255, 60%);
+  --color-glass-md: rgba(255, 255, 255, 40%);
+  --color-glass-lg: rgba(255, 255, 255, 20%);
+
   --color-success: #388e3c;
   --color-warning: #d32f2f;
 

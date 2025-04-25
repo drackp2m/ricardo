@@ -1,9 +1,0 @@
-@import url('../../style.css');
-
-.canvas {
-  position: relative;
-}
-
-.canvas p {
-  position: absolute;
-}

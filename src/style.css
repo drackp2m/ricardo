@@ -15,11 +15,7 @@ a {
 }
 
 body {
-    font-family: 'Quicksand', Arial, sans-serif;
-    font-weight: 500;
-    font-size: 16px;
     height: 100dvh;
-    color: #333;
 }
 
 body::before {
@@ -41,11 +37,11 @@ body::before {
     position: relative;
     min-width: 300px;
     max-width: 420px;
-    border: 1px solid rgba(256, 256, 256, 35%);
+    border: 1px solid var(--color-glass-sm);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 50%);
-    backdrop-filter: blur(2.5px);
-    box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-glass-md);
+    backdrop-filter: blur(2px);
+    box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card::before {
@@ -63,8 +59,17 @@ body::before {
 }
 
 .card .header {
-    background-color: rgba(256, 256, 256, 35%);
-    border-radius: 10px 10px 0 0;
+    background-color: var(--color-glass-md);
+    border-radius: var(--space-2) var(--space-2) 0 0;
+}
+
+.card .body,
+.card .footer {
+    /* background-color: var(--color-glass-md); */
+}
+
+.card .footer {
+    border-radius: 0 0 var(--space-2) var(--space-2);
 }
 
 @keyframes spin {

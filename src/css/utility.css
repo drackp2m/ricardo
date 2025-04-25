@@ -1,3 +1,7 @@
+.color-primary-contrast {
+  color: var(--color-primary-contrast);
+}
+
 /* Flexbox Utilities */
 
 /* Flex directions */

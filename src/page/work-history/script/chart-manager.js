@@ -69,6 +69,10 @@ export class ChartManager {
   #getMinMax(mode) {
     if (mode === 'range') {
       const all = this.dataModes.range.flat().filter((x) => x !== null);
+      
+      if (all.length === 0) {
+        return [15, 23];
+      }
 
       return [Math.floor(Math.min(...all)), Math.ceil(Math.max(...all))];
     } else {
@@ -85,10 +89,10 @@ export class ChartManager {
 
     const sign = decimalHour < 0 ? '-' : '';
     decimalHour = Math.abs(decimalHour);
-    const h = Math.floor(decimalHour);
-    const m = Math.round((decimalHour % 1) * 60);
+    const hours = Math.floor(decimalHour);
+    const minutes = Math.round((decimalHour % 1) * 60);
 
-    return `${sign}${h}:${m.toString().padStart(2, '0')}`;
+    return `${sign}${hours}:${minutes.toString().padStart(2, '0')}`;
   }
 
   #getChartConfig() {
@@ -119,9 +123,9 @@ export class ChartManager {
       options: {
         indexAxis: 'x',
         animation: {
-          duration: 400,
+          duration: 500,
           delay: function (context) {
-            return context.dataIndex * 100;
+            return context.dataIndex * 50;
           },
         },
         plugins: {

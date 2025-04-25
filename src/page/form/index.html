@@ -12,7 +12,10 @@
   <body class="flex-col justify-center align-center p-4 pb-16">
     <form id="registerEntry" class="card">
       <div class="header px-4 py-2">
-        <h3>Welcome <span id="displayName"></span></h3>
+        <h3>
+          <a href="page/work-history">Welcome</a>
+          <span id="displayName"></span>
+        </h3>
       </div>
 
       <div class="body flex-col gap-4 px-4 pt-3 pb-4">
@@ -36,9 +39,7 @@
         <p id="message" class="success font-sm text-right">&nbsp;</p>
       </div>
 
-      <div class="footer p-4 pt-0 flex-row justify-between align-center">
-        <a href="page/statistics">Go to statistics</a>
-
+      <div class="footer p-4 pt-0 flex-row justify-end">
         <button type="submit" id="registerEntrySubmit" class="flex-row align-center gap-2">
           Submit
         </button>
