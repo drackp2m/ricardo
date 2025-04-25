@@ -1,6 +1,5 @@
 @import url('./css/reset.css');
 @import url('./css/variable.css');
-@import url('./css/color.css');
 @import url('./css/utility.css');
 @import url('./css/font.css');
 @import url('./css/form.css');
@@ -8,6 +7,11 @@
 * {
     user-select: none;
     -webkit-user-select: none;
+    cursor: default;
+}
+
+a {
+    cursor: default;
 }
 
 body {

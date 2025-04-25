@@ -1,0 +1,191 @@
+import 'https://cdn.jsdelivr.net/npm/chart.js';
+
+export class ChartManager {
+  constructor(ctx, entries, mode = 'range') {
+    this.ctx = ctx;
+    this.entries = entries;
+    this.mode = mode;
+    this.chartInstance = null;
+
+    this.dataModes = this.#computeDataModes(entries);
+    this.labels = this.#computeLabels(entries);
+
+    this.#render();
+  }
+
+  setMode(mode) {
+    this.mode = mode;
+
+    this.#render();
+  }
+
+  updateData(entries) {
+    this.entries = entries;
+
+    this.dataModes = this.#computeDataModes(entries);
+    this.labels = this.#computeLabels(entries);
+
+    this.#render();
+  }
+
+  #computeLabels(entries) {
+    return entries.map((entry) =>
+      new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short' })
+    );
+  }
+
+  #computeDataModes(entries) {
+    return {
+      range: entries.map((entry) => this.#getInOut(entry, 'range')),
+      total: entries.map((entry) => this.#getInOut(entry, 'total')),
+    };
+  }
+
+  #getInOut(entry, mode) {
+    let inDec = this.#parseHourToDecimal(entry.in);
+    let outDec = this.#parseHourToDecimal(entry.out);
+
+    if (inDec === null || outDec === null) {
+      return mode === 'range' ? [null, null] : null;
+    }
+
+    if (outDec < inDec) {
+      outDec += 24;
+    }
+
+    return mode === 'range' ? [inDec, outDec] : outDec - inDec;
+  }
+
+  #parseHourToDecimal(hhmm) {
+    if (!hhmm) {
+      return null;
+    }
+
+    const [h, m] = hhmm.split(':').map(Number);
+
+    return h + m / 60;
+  }
+
+  #getMinMax(mode) {
+    if (mode === 'range') {
+      const all = this.dataModes.range.flat().filter((x) => x !== null);
+
+      return [Math.floor(Math.min(...all)), Math.ceil(Math.max(...all))];
+    } else {
+      const all = this.dataModes.total.filter((x) => x !== null);
+
+      return [0, Math.ceil(Math.max(...all, 8))];
+    }
+  }
+
+  #formatHour(decimalHour) {
+    if (decimalHour == null) {
+      return '-';
+    }
+
+    const sign = decimalHour < 0 ? '-' : '';
+    decimalHour = Math.abs(decimalHour);
+    const h = Math.floor(decimalHour);
+    const m = Math.round((decimalHour % 1) * 60);
+
+    return `${sign}${h}:${m.toString().padStart(2, '0')}`;
+  }
+
+  #getChartConfig() {
+    const datasets =
+      this.mode === 'range'
+        ? [
+            {
+              label: 'In/Out',
+              data: this.dataModes.range,
+              backgroundColor: 'rgba(67,176,71,0.7)',
+              borderRadius: 0,
+            },
+          ]
+        : [
+            {
+              label: 'Worked',
+              data: this.dataModes.total,
+              backgroundColor: 'rgba(67,176,71,0.7)',
+              borderRadius: 0,
+            },
+          ];
+
+    const [minHour, maxHour] = this.#getMinMax(this.mode);
+
+    return {
+      type: 'bar',
+      data: { labels: this.labels, datasets },
+      options: {
+        indexAxis: 'x',
+        animation: {
+          duration: 400,
+          delay: function (context) {
+            return context.dataIndex * 100;
+          },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (context) => {
+                const date = new Date(this.entries[context[0].dataIndex].date);
+                return date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                });
+              },
+              label: (context) => {
+                if (this.mode === 'range') {
+                  const [start, end] = context.raw;
+                  
+                  return `In ${this.#formatHour(start)}, out ${this.#formatHour(end)}`;
+                } else {
+                  return `Worked ${this.#formatHour(context.raw)}`;
+                }
+              },
+            },
+          },
+        },
+        responsive: true,
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            grid: { display: false },
+            min: minHour,
+            max: maxHour,
+            ticks: {
+              callback: (val, idx, ticks) => {
+                if (this.mode === 'range') {
+                  return Math.floor(val).toString();
+                } else {
+                  return val + 'h';
+                }
+              },
+              stepSize: 2,
+              autoSkip: false,
+              includeBounds: false,
+            },
+          },
+        },
+      },
+    };
+  }
+
+  #render() {
+    document.getElementById('loading').style.display = 'none';
+
+    if (!this.chartInstance) {
+      this.chartInstance = new Chart(this.ctx, this.#getChartConfig());
+    } else {
+      const config = this.#getChartConfig();
+      this.chartInstance.data.labels = config.data.labels;
+      this.chartInstance.data.datasets[0].data = config.data.datasets[0].data;
+      this.chartInstance.data.datasets[0].label = config.data.datasets[0].label;
+      this.chartInstance.options.scales.y.min = config.options.scales.y.min;
+      this.chartInstance.options.scales.y.max = config.options.scales.y.max;
+      this.chartInstance.update();
+    }
+  }
+}

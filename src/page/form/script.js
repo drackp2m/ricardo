@@ -25,7 +25,7 @@ mainReady.then(() => {
     const entryTime = document.getElementById('entryTime').value.trim();
     const exitTime = document.getElementById('exitTime').value.trim();
 
-    document.getElementById('errorMessage').innerHTML = ' ';
+    document.getElementById('message').innerHTML = ' ';
 
     const form = document.getElementById('registerEntry');
 
@@ -46,12 +46,12 @@ mainReady.then(() => {
         if (response.success) {
           document.getElementById('registerEntrySubmit').classList.remove('loading');
           document.getElementById('registerEntry').reset();
-          document.getElementById('errorMessage').textContent = 'Entry registered successfully!';
-          document.getElementById('errorMessage').style.color = 'green';
+          
+          document.getElementById('message').classList.replace('warning', 'success');
+          document.getElementById('message').textContent = 'Entry registered successfully!';
           setTimeout(() => {
-            document.getElementById('errorMessage').textContent = '&nbsp;';
+            document.getElementById('message').textContent = ' ';
           }, 3000);
-          document.getElementById('errorMessage').style.color = 'inherit';
           Array.from(form.elements).forEach((el) => (el.disabled = false));
         } else if (response.error === 'entryAlreadyExists') {
         } else {
@@ -64,7 +64,7 @@ mainReady.then(() => {
   };
 
   function showError(message, form) {
-    const errorElement = document.getElementById('errorMessage');
+    const errorElement = document.getElementById('message');
     errorElement.textContent = message;
 
     Array.from(form.elements).forEach((el) => (el.disabled = false));

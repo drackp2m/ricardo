@@ -1,10 +1,10 @@
 import { url } from "../../script/config.js";
-import { getWeekNumber, getWeekDays } from "../../script/utils.js";
+import { getWeekNumber, getWeekDays, getWeekRangeFromYearAndWeek } from "../../script/utils.js";
 
 /**
  * @typedef {Object} PageData
  * @property {string} date
- * @property {string|null} estimatedArrival
+ * @property {string|null} entryTime
  * @property {string|null} in
  * @property {string|null} out
  * @property {string|null} break
@@ -12,11 +12,12 @@ import { getWeekNumber, getWeekDays } from "../../script/utils.js";
  */
 
 /**
- * @param {number} pageNumber
+ * @param {number} year
+ * @param {number} week
  * @param {boolean} [forceFetch]
  * @returns {Promise<PageData[]>}
  */
-export async function fetchPage(pageNumber, forceFetch = false) {
+export async function fetchPage(year, week, forceFetch = false) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
   const userUuid = localStorage.getItem("userUuid");
 
@@ -39,7 +40,8 @@ export async function fetchPage(pageNumber, forceFetch = false) {
     const newPages = {};
 
     Object.keys(window.pageCache.pages).forEach(key => {
-      const newKey = parseInt(key, 10) + diff;
+      const [kYear, kWeek] = key.split('-').map(Number);
+      const newKey = `${kYear}-${kWeek + diff}`;
       newPages[newKey] = window.pageCache.pages[key];
     });
 
@@ -47,11 +49,14 @@ export async function fetchPage(pageNumber, forceFetch = false) {
     window.pageCache.cachedWeek = actualWeek;
   }
 
-  if (!forceFetch && window.pageCache.pages[pageNumber]) {
-    return window.pageCache.pages[pageNumber];
+  const cacheKey = `${year}-${week}`;
+
+  if (!forceFetch && window.pageCache.pages[cacheKey]) {
+    return window.pageCache.pages[cacheKey];
   }
 
-  const { from, to } = getWeekDays(pageNumber);
+  const { from, to } = getWeekRangeFromYearAndWeek(year, week);
+
   const body = new URLSearchParams({
     action: "getEntriesBetweenDates",
     userUuid,
@@ -62,7 +67,7 @@ export async function fetchPage(pageNumber, forceFetch = false) {
   const response = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body });
   const { entries } = await response.json();
 
-  window.pageCache.pages[pageNumber] = entries;
+  window.pageCache.pages[cacheKey] = entries;
 
   return entries;
 }
