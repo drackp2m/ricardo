@@ -2,6 +2,12 @@ import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
 
 mainReady.then(() => {
+  const userUuid = localStorage.getItem('userUuid');
+  
+  if (userUuid !== null) {
+    window.location.href = `${url.basePathname}page/clock-in`;
+  }
+
   const GOOGLE_SCRIPT_URL = url.googleSheets;
 
   document.getElementById('userForm').onsubmit = function (e) {
@@ -9,7 +15,7 @@ mainReady.then(() => {
 
     const userUuid = document.getElementById('userUuid').value.trim();
 
-    if (!userUuid) {
+    if (userUuid === '') {
       showError('Please enter a valid user ID', form);
       return;
     }
@@ -34,7 +40,7 @@ mainReady.then(() => {
           localStorage.setItem('userName', response.data.name);
           localStorage.setItem('userSurname', response.data.surname);
 
-          window.location.href = `${url.basePathname}page/form`;
+          window.location.href = `${url.basePathname}page/clock-in`;
         } else {
           showError(response.error || 'User not found', form);
         }

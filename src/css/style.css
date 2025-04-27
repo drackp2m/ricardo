@@ -39,7 +39,7 @@ body::before {
     position: relative;
     min-width: 300px;
     max-width: 420px;
-    border: 1px solid var(--color-glass-sm);
+    border: 1px solid var(--color-glass-md);
     border-radius: 10px;
     background-color: var(--color-glass-md);
     backdrop-filter: blur(2px);

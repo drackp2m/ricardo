@@ -21,7 +21,7 @@ export const mainReady = (async function () {
 
       if (initialSessionActiveChecked === true) {
         const destinationUrl = isSessionActive
-          ? `${url.basePathname}page/form`
+          ? `${url.basePathname}page/clock-in`
           : `${url.basePathname}page/login`;
 
         window.location.href = destinationUrl;
@@ -67,10 +67,16 @@ export const mainReady = (async function () {
         try {
           await googleSheets.getWorkHistory(year, week, false);
         } catch (error) {
+          localStorage.removeItem('userUuid');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('userSurname');
+
           window.location.href = `${url.basePathname}page/login`;
         }
 
-        window.location.href = `${url.basePathname}page/form`;
+        const initialRedirectFrom = sessionStorage.getItem('initialRedirectFrom');
+
+        window.location.href = initialRedirectFrom ?? `${url.basePathname}page/clock-in`;
       } catch (error) {
         window.location.href = `${url.basePathname}page/login`;
       }
@@ -82,16 +88,12 @@ export const mainReady = (async function () {
   });
 
   function executeFirstRedirectIfNeeded() {
-    console.log('checking redirection...');
-    
-    const initialRedirectCompleted = sessionStorage.getItem('initialRedirect') !== null;
+    const initialRedirectCompleted = sessionStorage.getItem('initialRedirectFrom') !== null;
 
     if (initialRedirectCompleted === false) {
-      sessionStorage.setItem('initialRedirect', 'true');
+      sessionStorage.setItem('initialRedirectFrom', location.pathname);
 
       if (location.pathname !== url.basePathname) {
-        console.log('redirection needed');
-        
         window.location.href = url.basePathname;
       }
     }

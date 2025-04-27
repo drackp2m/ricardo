@@ -21,6 +21,7 @@ input[disabled] {
 }
 
 input[type="checkbox"] {
+  position: relative;
   padding: calc(var(--space-3) / 2);
   display: flex;
   align-items: center;
@@ -28,9 +29,17 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked::before {
-  content: "✔";
+  content: "";
   position: absolute;
-  color: var(--color-primary);
+  height: 1em;
+  -webkit-mask-image: url('../asset/icon/check.svg');
+  mask-image: url('../asset/icon/check.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 0.9em 0.9em;
+  background-color: var(--color-primary);
+  aspect-ratio: 1;
 }
 
 input::placeholder {
@@ -57,7 +66,6 @@ button:hover {
 }
 
 button .icon {
-  /* height: var(--font-md); */
   background-color: var(--color-primary-contrast);
 }
 
