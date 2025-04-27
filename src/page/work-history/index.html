@@ -26,9 +26,10 @@
           <canvas id="myChart" height="220" width="320"></canvas>
         </div>
 
-        <label class="flex-row gap-2 align-center self-center">
-          <input type="checkbox" id="showWorkedHours" /> Show worked hours
-        </label>
+        <div class="flex-row gap-2 align-center self-center">
+          <input type="checkbox" id="showWorkedHours" />
+          <label for="showWorkedHours" class="mb-0">Show worked hours </label>
+        </div>
       </div>
 
       <div class="footer p-4 pt-0 flex-row justify-between align-center">
@@ -41,7 +42,7 @@
 
         <button type="button" id="next-week" class="flex-row">
           <span class="icon square spinner-line hidden"></span>
-          <span class="icon chevron-right"></span>
+          <span class="icon square chevron-right"></span>
         </button>
       </div>
     </form>

@@ -1,13 +1,14 @@
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: var(--space-2);
+  font-weight: var(--weight-lg);
 }
 
 input {
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-1) ;
   border: 1px solid var(--color-glass-md);
   border-radius: var(--space-1);
-  background-color: var(--color-glass-md);
+  background-color: var(--color-glass-sm);
   cursor: default;
 }
 
@@ -16,7 +17,7 @@ input[type="text"] {
 }
 
 input[disabled] {
-  background-color: var(--color-glass-sm);
+  background-color: var(--color-glass-md);
   color: rgba(0, 0, 0, 35%);
 }
 
@@ -42,6 +43,10 @@ input[type="checkbox"]:checked::before {
   aspect-ratio: 1;
 }
 
+input[type="checkbox"]:disabled ~ label {
+  opacity: 0.6;
+} 
+
 input::placeholder {
   color: rgba(0, 0, 0, 35%);
 }
@@ -61,7 +66,12 @@ button {
   justify-content: center;
 }
 
-button:hover {
+button:disabled {
+  background-color: var(--color-primary-disabled);
+  color: var(--color-glass-md);
+}
+
+button:not(:disabled):hover {
   background-color: var(--color-primary-hover);
 }
 

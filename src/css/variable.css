@@ -59,4 +59,5 @@
   --color-primary: rgb(76, 175, 80);
   --color-primary-contrast: rgb(255, 255, 255);
   --color-primary-hover: rgb(69, 160, 73);
+  --color-primary-disabled: rgb(130, 200, 130);
 }
