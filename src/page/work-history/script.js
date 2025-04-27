@@ -1,16 +1,18 @@
 import { mainReady } from '../../script.js';
-import { getWeekNumberByDate, getWeeksNumberByYear } from '../../script/utils.js';
-import { fetchPage, setInfoToHtml } from './script/utils.js';
+import { getWeeksNumberByYear, getCurrentYearAndWeek } from '../../script/utils.js';
+import { setInfoToHtml } from './script/utils.js';
 import { ChartManager } from './script/chart-manager.js';
+import { GoogleSheets } from '../../script/google-sheets/main.js';
 
 mainReady.then(async () => {
   let currentMode = 'range';
   const ctx = document.getElementById('myChart').getContext('2d');
 
-  let currentWeek = getWeekNumberByDate(new Date());
-  let currentYear = new Date().getFullYear();
+  let { year: currentYear, week: currentWeek } = getCurrentYearAndWeek();
 
-  const entries = await fetchPage(currentYear, currentWeek);
+  const googleSheets = new GoogleSheets();
+
+  const entries = await googleSheets.getWorkHistory(currentYear, currentWeek);
 
   setInfoToHtml(currentYear, currentWeek);
 
@@ -42,7 +44,7 @@ mainReady.then(async () => {
       currentWeek += modification;
     }
 
-    const entries = await fetchPage(currentYear, currentWeek);
+    const entries = await googleSheets.getWorkHistory(currentYear, currentWeek, true);
 
     setInfoToHtml(currentYear, currentWeek);
 

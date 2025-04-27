@@ -2,6 +2,22 @@
   color: var(--color-primary-contrast);
 }
 
+.surface-primary {
+  background-color: var(--color-primary);
+}
+
+.surface-primary-contrast {
+  background-color: var(--color-primary-contrast);
+}
+
+.hidden {
+  display: none;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
 /* Flexbox Utilities */
 
 /* Flex directions */

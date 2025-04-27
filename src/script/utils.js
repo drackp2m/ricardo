@@ -42,6 +42,17 @@ export function getWeekNumberByDate(date) {
 }
 
 /**
+ * @returns {{ year: number, week: number }}
+ */
+export function getCurrentYearAndWeek() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const week = getWeekNumberByDate(today);
+
+  return { year, week };
+}
+
+/**
  * @param {number} year
  * @param {number} week
  * @returns {{from: string, to: string}}

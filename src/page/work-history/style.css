@@ -1,4 +1,4 @@
-@import url('../../style.css');
+@import url('../../css/style.css');
 
 .canvas {
   position: relative;
@@ -6,36 +6,4 @@
 
 .canvas p {
   position: absolute;
-}
-
-button {
-  position: relative;
-  width: var(--space-8);
-  height: var(--space-8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-button::before {
-  content: '';
-  position: absolute;
-  height: var(--space-4);
-  aspect-ratio: 320 / 512;
-  background-color: var(--color-primary-contrast);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  display: inline-block;
-}
-
-#previous-week::before {
-  -webkit-mask-image: url('../../asset/icon/chevron-left.svg');
-  mask-image: url('../../asset/icon/chevron-left.svg');
-}
-
-#next-week::before {
-  -webkit-mask-image: url('../../asset/icon/chevron-right.svg');
-  mask-image: url('../../asset/icon/chevron-right.svg');
 }

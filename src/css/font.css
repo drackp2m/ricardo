@@ -36,8 +36,7 @@
 body {
   font-family: 'Quicksand', Arial, sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  color: #333;
+  color: var(--color-glass-contrast);
 }
 
 .font-xs {
@@ -60,6 +59,22 @@ body {
 }
 .font-3xl {
   font-size: var(--font-3xl);
+}
+
+.weight-sm {
+  font-weight: var(--weight-sm);
+}
+.weight-md {
+  font-weight: var(--weight-md);
+}
+.weight-lg {
+  font-weight: var(--weight-lg);
+}
+.weight-xl {
+  font-weight: var(--weight-xl);
+}
+.weight-2xl {
+  font-weight: var(--weight-2xl);
 }
 
 .text-left {

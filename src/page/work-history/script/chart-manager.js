@@ -1,4 +1,4 @@
-import 'https://cdn.jsdelivr.net/npm/chart.js';
+import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
 export class ChartManager {
   constructor(ctx, entries, mode = 'range') {

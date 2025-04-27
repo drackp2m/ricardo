@@ -1,0 +1,61 @@
+.icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 1.25em;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 1em 1em;
+  background-color: var(--color-glass-contrast);
+}
+
+.icon.check {
+  -webkit-mask-image: url('../asset/icon/check.svg');
+  mask-image: url('../asset/icon/check.svg');
+}
+
+.icon.chevron-left {
+  -webkit-mask-image: url('../asset/icon/chevron-left.svg');
+  mask-image: url('../asset/icon/chevron-left.svg');
+}
+
+.icon.chevron-right {
+  -webkit-mask-image: url('../asset/icon/chevron-right.svg');
+  mask-image: url('../asset/icon/chevron-right.svg');
+}
+
+.icon.spinner-dots {
+  -webkit-mask-image: url('../asset/icon/spinner-dots.svg');
+  mask-image: url('../asset/icon/spinner-dots.svg');
+  animation: spin-steps 1s steps(8) infinite;
+}
+
+.icon.spinner-line {
+  -webkit-mask-image: url('../asset/icon/spinner-line.svg');
+  mask-image: url('../asset/icon/spinner-line.svg');
+  animation: spin-steps 1s steps(8) infinite;
+}
+
+.icon.chevron-left, 
+.icon.chevron-right {
+  aspect-ratio: 320 / 512;
+}
+
+.icon.check {
+  aspect-ratio: 448 / 512;
+}
+
+.icon.spinner-dots,
+.icon.spinner-line {
+  aspect-ratio: 512 / 512;
+}
+
+.icon.squared {
+  aspect-ratio: 1;
+}
+
+@keyframes spin-steps {
+  to { transform: rotate(360deg); }
+}

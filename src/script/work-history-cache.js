@@ -4,7 +4,7 @@ export class WorkHistoryCache {
   static getAll() {
     const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
     
-    if (!raw) {
+    if (raw === null) {
       return {};
     }
 
