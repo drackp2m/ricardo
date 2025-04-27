@@ -6,84 +6,70 @@
 @import url('./utility.css');
 
 * {
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
 }
 
 a {
-    cursor: default;
+  cursor: default;
 }
 
 body {
-    height: 100dvh;
-    font-size: 16px;
+  height: 100dvh;
+  font-size: 16px;
 }
 
 body::before {
-    content: "";
-    position: fixed;
-    z-index: -1;
-    top: -100vh;
-    left: -100vw;
-    width: 300vw;
-    height: 300vh;
-    background-image: url('../asset/vector/noise-effect.svg'), url('../asset/vector/ice-cream-cookie-pattern.svg');
-    background-repeat: repeat, repeat;
-    background-size: 64px, 32px;
-    background-position: 0 0, -4px 32px;
-    transform: rotate(-35deg);
+  content: '';
+  position: fixed;
+  z-index: -1;
+  top: -100vh;
+  left: -100vw;
+  width: 300vw;
+  height: 300vh;
+  background-image: url('../asset/vector/noise-effect.svg'),
+    url('../asset/vector/ice-cream-cookie-pattern.svg');
+  background-repeat: repeat, repeat;
+  background-size: 64px, 32px;
+  background-position: 0 0, -4px 32px;
+  transform: rotate(-35deg);
 }
 
 .card {
-    position: relative;
-    min-width: 300px;
-    max-width: 420px;
-    border: 1px solid var(--color-glass-md);
-    border-radius: 10px;
-    background-color: var(--color-glass-md);
-    backdrop-filter: blur(2px);
-    box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-width: 300px;
+  max-width: 420px;
+  border: 1px solid var(--color-glass-md);
+  border-radius: 10px;
+  background-color: var(--color-glass-md);
+  backdrop-filter: blur(2px);
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../asset/vector/noise-effect.svg');
-    background-repeat: repeat;
-    background-size: 64px;
-    opacity: 0.6;
-    z-index: -1;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../asset/vector/noise-effect.svg');
+  background-repeat: repeat;
+  background-size: 64px;
+  opacity: 0.6;
+  z-index: -1;
 }
 
 .card .header {
-    background-color: var(--color-glass-md);
-    border-radius: var(--space-2) var(--space-2) 0 0;
+  background-color: var(--color-glass-md);
+  border-radius: var(--space-2) var(--space-2) 0 0;
 }
 
 .card .footer {
-    border-radius: 0 0 var(--space-2) var(--space-2);
+  border-radius: 0 0 var(--space-2) var(--space-2);
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.loading::before {
-    content: "";
-
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border: 2px solid;
-    border-top: 2px solid transparent;
-    border-right: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s steps(8) infinite;
-    vertical-align: middle;
+.loading [class*='spinner'] {
+  display: initial;
 }

@@ -3,8 +3,12 @@ import { getWeeksNumberByYear, getCurrentYearAndWeek } from '../../script/utils.
 import { setInfoToHtml } from './script/utils.js';
 import { ChartManager } from './script/chart-manager.js';
 import { GoogleSheets } from '../../script/google-sheets/main.js';
+import { FormManager } from '../../script/form-manager.js';
 
 mainReady.then(async () => {
+  const formManager = new FormManager('work-history-form');
+  formManager.disable();
+
   let currentMode = 'range';
   const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -18,16 +22,22 @@ mainReady.then(async () => {
 
   const chartManager = new ChartManager(ctx, entries, currentMode);
 
+  formManager.enable();
+
   document.getElementById('showWorkedHours').addEventListener('change', (e) => {
     currentMode = e.target.checked ? 'total' : 'range';
     chartManager.setMode(currentMode);
   });
 
   document.getElementById('previous-week').addEventListener('click', async () => {
+    formManager.disable('previous-week');
+
     updateChartAndHtmlInfo(false);
   });
 
   document.getElementById('next-week').addEventListener('click', async () => {
+    formManager.disable('next-week');
+
     updateChartAndHtmlInfo(true);
   });
 
@@ -49,5 +59,7 @@ mainReady.then(async () => {
     setInfoToHtml(currentYear, currentWeek);
 
     chartManager.updateData(entries);
+
+    formManager.enable();
   }
 });
