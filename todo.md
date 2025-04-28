@@ -8,6 +8,7 @@ Requeriments:
 
 Developing
 - clear cache when login distinct user
+- clear cache for a week when employee check-in on this
 - buttons effect glass
 + feedback when change week on "work-history" section
 - check login errors
