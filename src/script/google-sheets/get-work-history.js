@@ -6,7 +6,7 @@ export async function getWorkHistory(year, week, useCache) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
   const userUuid = localStorage.getItem('userUuid');
 
-  if (!userUuid) {
+  if (userUuid === null) {
     window.location.href = url.basePathname;
 
     return [];

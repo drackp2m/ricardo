@@ -7,20 +7,17 @@ export class WorkHistoryCache {
   static CACHE_KEY = 'workHistoryCache';
 
   /**
-   * @returns {Object<string, WorkHistoryCache>}
+   * @param {number} year 
+   * @param {number} week 
+   * @param {PageData} data
    */
-  static getAll() {
-    const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
+  static set(year, week, data) {
+    const all = WorkHistoryCache.getAll();
+    const key = `${year}-${week}`;
 
-    if (raw === null) {
-      return {};
-    }
+    all[key] = { cachedAt: new Date(), data };
 
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return {};
-    }
+    localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
   }
 
   /**
@@ -37,17 +34,20 @@ export class WorkHistoryCache {
   }
 
   /**
-   * @param {number} year 
-   * @param {number} week 
-   * @param {PageData} data
+   * @returns {Object<string, WorkHistoryCache>}
    */
-  static set(year, week, data) {
-    const all = WorkHistoryCache.getAll();
-    const key = `${year}-${week}`;
+  static getAll() {
+    const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
 
-    all[key] = { cachedAt: new Date(), data };
+    if (raw === null) {
+      return {};
+    }
 
-    localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {};
+    }
   }
 
   /**

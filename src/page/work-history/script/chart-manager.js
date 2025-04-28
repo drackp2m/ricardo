@@ -1,6 +1,11 @@
 import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
 export class ChartManager {
+  /**
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   * @param {'range'|'total'} mode
+   */
   constructor(ctx, entries, mode = 'range') {
     this.ctx = ctx;
     this.entries = entries;
@@ -13,12 +18,18 @@ export class ChartManager {
     this.#render();
   }
 
+  /**
+   * @param {'range'|'total'} mode
+   */
   setMode(mode) {
     this.mode = mode;
 
     this.#render();
   }
 
+  /**
+   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   */
   updateData(entries) {
     this.entries = entries;
 
@@ -28,12 +39,18 @@ export class ChartManager {
     this.#render();
   }
 
+  /**
+   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   */
   #computeLabels(entries) {
     return entries.map((entry) =>
       new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short' })
     );
   }
 
+  /**
+   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   */
   #computeDataModes(entries) {
     return {
       range: entries.map((entry) => this.#getInOut(entry, 'range')),
@@ -41,6 +58,11 @@ export class ChartManager {
     };
   }
 
+  /**
+   * @param {import('../../../script/google-sheets/main').PageData} entry
+   * @param {'range'|'total'} mode
+   * @returns {number[]|number|null[]|null}
+   */
   #getInOut(entry, mode) {
     let inDec = this.#parseHourToDecimal(entry.in);
     let outDec = this.#parseHourToDecimal(entry.out);
@@ -56,6 +78,10 @@ export class ChartManager {
     return mode === 'range' ? [inDec, outDec] : outDec - inDec;
   }
 
+  /**
+   * @param {string} hhmm 
+   * @returns {number|null}
+   */
   #parseHourToDecimal(hhmm) {
     if (!hhmm) {
       return null;
@@ -66,10 +92,14 @@ export class ChartManager {
     return h + m / 60;
   }
 
+  /**
+   * @param {'range'|'total'} mode
+   * @returns {number[]}
+   */
   #getMinMax(mode) {
     if (mode === 'range') {
       const all = this.dataModes.range.flat().filter((x) => x !== null);
-      
+
       if (all.length === 0) {
         return [15, 23];
       }
@@ -82,6 +112,10 @@ export class ChartManager {
     }
   }
 
+  /**
+   * @param {number} decimalHour 
+   * @returns {string}
+   */
   #formatHour(decimalHour) {
     if (decimalHour == null) {
       return '-';
@@ -93,6 +127,22 @@ export class ChartManager {
     const minutes = Math.round((decimalHour % 1) * 60);
 
     return `${sign}${hours}:${minutes.toString().padStart(2, '0')}`;
+  }
+
+  #render() {
+    document.getElementById('loading').style.display = 'none';
+
+    if (!this.chartInstance) {
+      this.chartInstance = new Chart(this.ctx, this.#getChartConfig());
+    } else {
+      const config = this.#getChartConfig();
+      this.chartInstance.data.labels = config.data.labels;
+      this.chartInstance.data.datasets[0].data = config.data.datasets[0].data;
+      this.chartInstance.data.datasets[0].label = config.data.datasets[0].label;
+      this.chartInstance.options.scales.y.min = config.options.scales.y.min;
+      this.chartInstance.options.scales.y.max = config.options.scales.y.max;
+      this.chartInstance.update();
+    }
   }
 
   #getChartConfig() {
@@ -143,7 +193,7 @@ export class ChartManager {
               label: (context) => {
                 if (this.mode === 'range') {
                   const [start, end] = context.raw;
-                  
+
                   return `In ${this.#formatHour(start)}, out ${this.#formatHour(end)}`;
                 } else {
                   return `Worked ${this.#formatHour(context.raw)}`;
@@ -175,21 +225,5 @@ export class ChartManager {
         },
       },
     };
-  }
-
-  #render() {
-    document.getElementById('loading').style.display = 'none';
-
-    if (!this.chartInstance) {
-      this.chartInstance = new Chart(this.ctx, this.#getChartConfig());
-    } else {
-      const config = this.#getChartConfig();
-      this.chartInstance.data.labels = config.data.labels;
-      this.chartInstance.data.datasets[0].data = config.data.datasets[0].data;
-      this.chartInstance.data.datasets[0].label = config.data.datasets[0].label;
-      this.chartInstance.options.scales.y.min = config.options.scales.y.min;
-      this.chartInstance.options.scales.y.max = config.options.scales.y.max;
-      this.chartInstance.update();
-    }
   }
 }

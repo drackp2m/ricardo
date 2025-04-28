@@ -4,7 +4,7 @@ import { url } from '../../script/config.js';
 mainReady.then(() => {
   const userUuid = localStorage.getItem('userUuid');
 
-  if (!userUuid) {
+  if (userUuid === null) {
     window.location.href = url.basePathname;
     return;
   }
