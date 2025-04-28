@@ -3,15 +3,11 @@ import { url } from '../../script/config.js';
 
 mainReady.then(() => {
   const userUuid = localStorage.getItem('userUuid');
-  const name = localStorage.getItem('userName');
-  const surname = localStorage.getItem('userSurname');
 
-  if (!userUuid || !name || !surname) {
+  if (!userUuid) {
     window.location.href = url.basePathname;
     return;
   }
-
-  document.getElementById('displayName').textContent = `${name} ${surname}`;
 
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('date').value = today;

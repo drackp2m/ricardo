@@ -1,15 +1,15 @@
 import { login } from './login.js';
 import { getWorkHistory } from './get-work-history.js';
 
-  /**
-   * @typedef {Object} PageData
-   * @property {string} date
-   * @property {string|null} entryTime
-   * @property {string|null} in
-   * @property {string|null} out
-   * @property {string|null} break
-   * @property {string|null} total
-   */
+/**
+ * @typedef {Object} PageData
+ * @property {string} date
+ * @property {string|null} entryTime
+ * @property {string|null} in
+ * @property {string|null} out
+ * @property {string|null} break
+ * @property {string|null} total
+ */
 
 export class GoogleSheets {
   /**
@@ -19,7 +19,7 @@ export class GoogleSheets {
   async login(userUuid) {
     return login(userUuid);
   }
-  
+
   /**
    * @param {number} year
    * @param {number} week

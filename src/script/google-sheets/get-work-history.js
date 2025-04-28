@@ -16,7 +16,7 @@ export async function getWorkHistory(year, week, useCache) {
     const cached = WorkHistoryCache.get(year, week);
 
     if (cached) {
-      return cached;
+      return cached.data;
     }
   }
 

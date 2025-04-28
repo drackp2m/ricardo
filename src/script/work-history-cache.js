@@ -1,9 +1,17 @@
+/**
+ * @typedef {import('../script/google-sheets/main.js').PageData} PageData
+ * @typedef {{ cachedAt: Date, data: PageData[] }} WorkHistoryCache
+ */
+
 export class WorkHistoryCache {
   static CACHE_KEY = 'workHistoryCache';
 
+  /**
+   * @returns {Object<string, WorkHistoryCache>}
+   */
   static getAll() {
     const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
-    
+
     if (raw === null) {
       return {};
     }
@@ -15,6 +23,11 @@ export class WorkHistoryCache {
     }
   }
 
+  /**
+   * @param {number} year 
+   * @param {number} week 
+   * @returns {WorkHistoryCache|null}
+   */
   static get(year, week) {
     const all = WorkHistoryCache.getAll();
 
@@ -23,12 +36,34 @@ export class WorkHistoryCache {
     return all[key] || null;
   }
 
+  /**
+   * @param {number} year 
+   * @param {number} week 
+   * @param {PageData} data
+   */
   static set(year, week, data) {
     const all = WorkHistoryCache.getAll();
     const key = `${year}-${week}`;
-    all[key] = data;
-    
+
+    all[key] = { cachedAt: new Date(), data };
+
     localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
+  }
+
+  /**
+   * @param {number} year
+   * @param {number} week
+   * @returns {boolean}
+   */
+  static delete(year, week) {
+    const all = WorkHistoryCache.getAll();
+    const key = `${year}-${week}`;
+
+    if (all[key]) {
+      delete all[key];
+
+      localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
+    }
   }
 
   static clear() {
