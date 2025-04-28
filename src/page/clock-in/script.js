@@ -1,5 +1,7 @@
 import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
+import { getWeekNumberByDate } from '../../script/utils.js';
+import { WorkHistoryCache } from '../../script/work-history-cache.js';
 
 mainReady.then(() => {
   const userUuid = localStorage.getItem('userUuid');
@@ -40,9 +42,14 @@ mainReady.then(() => {
       .then((res) => res.json())
       .then((response) => {
         if (response.success) {
+          const week = getWeekNumberByDate(new Date(date));
+          const year = new Date(date).getFullYear();
+
+          WorkHistoryCache.delete(year, week);
+
           document.getElementById('registerEntrySubmit').classList.remove('loading');
           document.getElementById('registerEntry').reset();
-          
+
           document.getElementById('message').classList.replace('warning', 'success');
           document.getElementById('message').textContent = 'Entry registered successfully!';
           setTimeout(() => {
@@ -50,6 +57,7 @@ mainReady.then(() => {
           }, 3000);
           Array.from(form.elements).forEach((el) => (el.disabled = false));
         } else if (response.error === 'entryAlreadyExists') {
+          showError(response.error || 'Unknown error', form);
         } else {
           showError(response.error || 'Unknown error', form);
         }

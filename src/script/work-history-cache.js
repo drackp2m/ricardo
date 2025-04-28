@@ -7,8 +7,8 @@ export class WorkHistoryCache {
   static CACHE_KEY = 'workHistoryCache';
 
   /**
-   * @param {number} year 
-   * @param {number} week 
+   * @param {number} year
+   * @param {number} week
    * @param {PageData} data
    */
   static set(year, week, data) {
@@ -21,8 +21,8 @@ export class WorkHistoryCache {
   }
 
   /**
-   * @param {number} year 
-   * @param {number} week 
+   * @param {number} year
+   * @param {number} week
    * @returns {WorkHistoryCache|null}
    */
   static get(year, week) {
