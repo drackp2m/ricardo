@@ -111,3 +111,13 @@ export function formatDateToISO8601(date) {
     String(date.getDate()).padStart(2, '0')
   );
 }
+
+/**
+ * @param {Date} date 
+ * @returns {string}
+ */
+export function formatDateToString(date) {
+  const localeDateStringOptions = { year: 'numeric', month: 'short', day: '2-digit' };
+
+  return date.toLocaleDateString('en-US', localeDateStringOptions);
+}

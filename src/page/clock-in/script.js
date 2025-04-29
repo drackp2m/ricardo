@@ -1,15 +1,16 @@
 import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
+import { GoogleSheets } from '../../script/google-sheets/main.js';
 import { getWeekNumberByDate } from '../../script/utils.js';
 import { WorkHistoryCache } from '../../script/work-history-cache.js';
 
 mainReady.then(() => {
   const userUuid = localStorage.getItem('userUuid');
 
-  if (userUuid === null) {
-    window.location.href = url.basePathname;
-    return;
-  }
+  const googleSheets = new GoogleSheets();
+
+  const currentWeek = getWeekNumberByDate(new Date(date));
+  const currentYear = new Date(date).getFullYear();
 
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('date').value = today;
@@ -42,10 +43,7 @@ mainReady.then(() => {
       .then((res) => res.json())
       .then((response) => {
         if (response.success) {
-          const week = getWeekNumberByDate(new Date(date));
-          const year = new Date(date).getFullYear();
-
-          WorkHistoryCache.delete(year, week);
+          WorkHistoryCache.delete(currentYear, currentWeek);
 
           document.getElementById('registerEntrySubmit').classList.remove('loading');
           document.getElementById('registerEntry').reset();

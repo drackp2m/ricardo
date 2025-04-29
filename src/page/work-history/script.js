@@ -1,7 +1,8 @@
-import { mainReady } from '../../script.js';
-import { getWeeksNumberByYear, getCurrentYearAndWeek } from '../../script/utils.js';
 import { setInfoToHtml } from './script/utils.js';
 import { ChartManager } from './script/chart-manager.js';
+
+import { mainReady } from '../../script.js';
+import { getWeeksNumberByYear, getCurrentYearAndWeek } from '../../script/utils.js';
 import { GoogleSheets } from '../../script/google-sheets/main.js';
 import { FormManager } from '../../script/form-manager.js';
 

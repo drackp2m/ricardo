@@ -1,4 +1,4 @@
-import { getWeekRangeFromYearAndWeek } from '../../../script/utils.js';
+import { formatDateToString, getWeekRangeFromYearAndWeek } from '../../../script/utils.js';
 
 /**
  * @param {number} year
@@ -13,10 +13,8 @@ export function setInfoToHtml(year, week) {
   const from = document.getElementById('from');
   const to = document.getElementById('to');
 
-  const localeDateStringOptions = { year: 'numeric', month: 'short', day: '2-digit' };
-
-  from.innerHTML = new Date(weekDays.from).toLocaleDateString('en-US', localeDateStringOptions);
-  to.innerHTML = new Date(weekDays.to).toLocaleDateString('en-US', localeDateStringOptions);
+  from.innerHTML = formatDateToString(new Date(weekDays.from));
+  to.innerHTML = formatDateToString(new Date(weekDays.to));
 
   weekInfo.classList.remove('hidden');
 

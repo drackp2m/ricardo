@@ -1,5 +1,7 @@
 import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
+import { formatDateToString } from '../../../script/utils.js';
+
 export class ChartManager {
   /**
    * @param {CanvasRenderingContext2D} ctx
@@ -184,11 +186,8 @@ export class ChartManager {
             callbacks: {
               title: (context) => {
                 const date = new Date(this.entries[context[0].dataIndex].date);
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                });
+
+                return formatDateToString(date);
               },
               label: (context) => {
                 if (this.mode === 'range') {
