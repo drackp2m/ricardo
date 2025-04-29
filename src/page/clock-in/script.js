@@ -9,11 +9,36 @@ mainReady.then(() => {
 
   const googleSheets = new GoogleSheets();
 
-  const currentWeek = getWeekNumberByDate(new Date(date));
-  const currentYear = new Date(date).getFullYear();
+  const now = new Date();
 
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('date').value = today;
+  const currentYear = now.getFullYear();
+  const currentWeek = getWeekNumberByDate(now);
+
+  const checkingEntranceElement = document.getElementById('checking-entrance');
+  const entryTimeElement = document.getElementById('entry-time');
+  const notWorkElement = document.getElementById('not-work');
+  checkingEntranceElement.classList.remove('hidden');
+
+  googleSheets.getWorkHistory(currentYear, currentWeek, false).then((workHistory) => {
+    const entryTimeValueElement = document.getElementById('entry-time-value');
+
+    const entryTime = workHistory.find(
+      (entry) => entry.date === now.toISOString().split('T')[0]
+    )?.entryTime;
+
+    if (entryTime === undefined || entryTime === null) {
+      checkingEntranceElement.classList.add('hidden');
+      notWorkElement.classList.remove('hidden');
+      return;
+    }
+
+    entryTimeValueElement.textContent = entryTime;
+    checkingEntranceElement.classList.add('hidden');
+    entryTimeElement.classList.remove('hidden');
+  });
+
+  const date = now.toISOString().split('T')[0];
+  document.getElementById('date').value = date;
 
   const GOOGLE_SCRIPT_URL = url.googleSheets;
 

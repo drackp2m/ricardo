@@ -10,14 +10,6 @@
   background-color: var(--color-primary-contrast);
 }
 
-.hidden {
-  display: none;
-}
-
-.invisible {
-  visibility: hidden;
-}
-
 /* Flexbox Utilities */
 
 /* Flex directions */
@@ -540,3 +532,11 @@
 .ml-28 { margin-left: var(--space-28); }
 .ml-29 { margin-left: var(--space-29); }
 .ml-30 { margin-left: var(--space-30); }
+
+.hidden {
+  display: none;
+}
+
+.invisible {
+  visibility: hidden;
+}
