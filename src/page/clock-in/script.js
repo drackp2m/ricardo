@@ -18,16 +18,18 @@ mainReady.then(() => {
   const entryTimeElement = document.getElementById('entry-time');
   const notWorkElement = document.getElementById('not-work');
   checkingEntranceElement.classList.remove('hidden');
-  const clockInFormElement = /** @type {HTMLFormElement|null} */ (
-    document.getElementById('clock-in-form')
-  );
-  const dateInputElement = /** @type {HTMLInputElement|null} */ (document.getElementById('date-input'));
-  const entryTimeInputElement = /** @type {HTMLInputElement|null} */ (
-    document.getElementById('entry-time-input')
-  );
-  const exitTimeInputElement = /** @type {HTMLInputElement|null} */ (
-    document.getElementById('exit-time-input')
-  );
+  const clockInFormElement =
+    /** @type {HTMLFormElement|null} */
+    (document.getElementById('clock-in-form'));
+  const dateInputElement =
+    /** @type {HTMLInputElement|null} */
+    (document.getElementById('date-input'));
+  const entryTimeInputElement =
+    /** @type {HTMLInputElement|null} */
+    (document.getElementById('entry-time-input'));
+  const exitTimeInputElement =
+    /** @type {HTMLInputElement|null} */
+    (document.getElementById('exit-time-input'));
 
   googleSheets.getWorkHistory(currentYear, currentWeek, false).then((workHistory) => {
     const entryTimeValueElement = document.getElementById('entry-time-value');

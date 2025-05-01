@@ -2,7 +2,12 @@ import { login } from './login.js';
 import { getWorkHistory } from './get-work-history.js';
 
 /**
- * @typedef {import('../../definition/google-sheets/login.response.mjs').LoginResponse} UserData
+ * @template T
+ * @typedef {import('../../definition/google-sheets/google-sheets.response.mjs').GoogleSheetsResponse<T>} GoogleSheetsResponse<T>
+ */
+
+/**
+ * @typedef {import('../../definition/google-sheets/login.response.mjs').LoginResponse} LoginResponse
  * @typedef {import('../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
  */
 
@@ -12,7 +17,7 @@ export class GoogleSheets {
 
   /**
    * @param {string} userUuid
-   * @returns {Promise<UserData>}
+   * @returns {Promise<GoogleSheetsResponse<LoginResponse>>}
    */
   async login(userUuid) {
     const requestKey = `login-${userUuid}`;
@@ -41,7 +46,7 @@ export class GoogleSheets {
 
     return this.#deduplicateRequest(requestKey, () => getWorkHistory(year, week, useCache));
   }
-  
+
   /**
    * @template T
    * @param {string} requestKey

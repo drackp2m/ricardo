@@ -10,9 +10,9 @@ mainReady.then(async () => {
   const formManager = new FormManager('work-history-form');
   formManager.disable();
 
-  const showWorkedHoursInput = /** @type {HTMLInputElement} */ (
-    document.getElementById('show-worked-hours-input')
-  );
+  const showWorkedHoursInput =
+    /** @type {HTMLInputElement} */
+    (document.getElementById('show-worked-hours-input'));
 
   /** @type {'range'|'total'} */
   let currentMode = 'range';
@@ -49,7 +49,7 @@ mainReady.then(async () => {
   });
 
   /**
-   * @param {boolean} nextWeek 
+   * @param {boolean} nextWeek
    */
   async function updateChartAndHtmlInfo(nextWeek) {
     const weeksNumberInCurrentYear = getWeeksNumberByYear(currentYear);

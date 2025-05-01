@@ -17,25 +17,22 @@
 
       <div class="body flex-col gap-2 px-4 pt-3 pb-4">
         <div class="form-group flex-col gap-1">
-          <label for="user-uuid">User identifier:</label>
+          <label for="user-uuid-input">User identifier:</label>
           <input
             type="text"
             id="user-uuid-input"
-            name="user-uuid-input"
+            name="userUuid"
             required
             placeholder="70934f75-8d6c-466f-bd85-b84f7d87f66e"
           />
         </div>
 
-        <p id="message" class="warn font-sm text-right">&nbsp;</p>
+        <p id="feedback" class="warn font-sm text-right">&nbsp;</p>
       </div>
 
       <div class="footer p-4 pt-0 flex-row justify-end">
-        <button
-          type="submit"
-          id="login-form-submit"
-          class="flex-row align-center gap-2"
-        >
+        <button type="submit" id="login-form-submit" class="flex-row align-center gap-2">
+          <span class="icon spinner-line hidden"></span>
           Submit
         </button>
       </div>

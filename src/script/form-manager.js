@@ -1,5 +1,7 @@
 export class FormManager {
+  /** @type {HTMLFormElement|null} */
   #formElement = null;
+  /** @type {HTMLParagraphElement|null} */
   #feedbackElement = null;
   #activeTriggerElement = null;
   #feedbackTimeout = null;
@@ -10,8 +12,12 @@ export class FormManager {
    * @param {string} [feedbackElementId]
    */
   constructor(formId, feedbackElementId) {
-    this.#formElement = document.getElementById(formId);
-    this.#feedbackElement = document.getElementById(feedbackElementId);
+    this.#formElement =
+      /** @type {HTMLFormElement|null} */
+      (document.getElementById(formId));
+    this.#feedbackElement =
+      /** @type {HTMLParagraphElement|null} */
+      (document.getElementById(feedbackElementId));
 
     if (this.#formElement === null) {
       throw new Error(`Form with ID "${formId}" not found.`);
@@ -19,11 +25,38 @@ export class FormManager {
   }
 
   /**
+   * @returns {Object<string, string>}
+   */
+  getData() {
+    const formData = new FormData(this.#formElement);
+
+    console.log({ formData: this.#formElement });
+
+    /** @type {Object} */
+    const data = {};
+
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+
+    return data;
+  }
+
+  reset() {
+    this.#formElement.reset();
+    this.clearFeedback();
+  }
+
+  /**
    * @param {string} [triggerElementId]
    */
   disable(triggerElementId) {
-    const elements = this.#formElement.querySelectorAll('input, textarea, select, button');
-    elements.forEach(el => el.disabled = true);
+    this.clearFeedback();
+
+    const elements =
+      /** @type {NodeListOf<HTMLInputElement>} */
+      (this.#formElement.querySelectorAll('input, textarea, select, button'));
+    elements.forEach((el) => (el.disabled = true));
 
     if (triggerElementId) {
       this.#activeTriggerElement = document.getElementById(triggerElementId);
@@ -37,12 +70,16 @@ export class FormManager {
   }
 
   enable() {
-    const elements = this.#formElement.querySelectorAll('input, textarea, select, button');
-    elements.forEach(el => el.disabled = false);
+    this.clearFeedback();
+    
+    const elements =
+      /** @type {NodeListOf<HTMLInputElement>} */
+      (this.#formElement.querySelectorAll('input, textarea, select, button'));
+    elements.forEach((el) => (el.disabled = false));
 
     if (this.#activeTriggerElement !== null) {
-        this.#activeTriggerElement.classList.remove('loading');
-        this.#activeTriggerElement = null;
+      this.#activeTriggerElement.classList.remove('loading');
+      this.#activeTriggerElement = null;
     }
   }
 
@@ -69,13 +106,12 @@ export class FormManager {
     }
 
     if (this.#feedbackElement !== null) {
-        this.#feedbackElement.textContent = ' ';
-        this.#feedbackElement.classList.remove('error', 'warning', 'success');
+      this.#feedbackElement.innerHTML = '&nbsp;';
+      this.#feedbackElement.classList.remove('error', 'warning', 'success');
     }
   }
 
   /**
-   * @private
    * @param {string} message
    * @param {'error'|'warning'|'success'} type
    * @param {number} duration
@@ -84,36 +120,17 @@ export class FormManager {
     this.clearFeedback();
 
     if (this.#feedbackElement !== null) {
-        this.#feedbackElement.textContent = message;
-        this.#feedbackElement.classList.remove('error', 'warning', 'success');
-        this.#feedbackElement.classList.add(type);
+      this.#feedbackElement.textContent = message;
+      this.#feedbackElement.classList.remove('error', 'warning', 'success');
+      this.#feedbackElement.classList.add(type);
 
-        if (duration > 0) {
-          this.#feedbackTimeout = setTimeout(() => {
-            this.clearFeedback();
-          }, duration);
-        }
+      if (duration > 0) {
+        this.#feedbackTimeout = setTimeout(() => {
+          this.clearFeedback();
+        }, duration);
+      }
     } else {
-        console[type === 'error' ? 'error' : 'info'](`Feedback (${type}): ${message}`);
+      console[type === 'error' ? 'error' : 'info'](`Feedback (${type}): ${message}`);
     }
-  }
-
-   /**
-   * @returns {Object<string, string>}
-   */
-  getData() {
-    const formData = new FormData(this.#formElement);
-    const data = {};
-
-    for (const [key, value] of formData.entries()) {
-      data[key] = value;
-    }
-
-    return data;
-  }
-
-  reset() {
-    this.#formElement.reset();
-    this.clearFeedback();
   }
 }

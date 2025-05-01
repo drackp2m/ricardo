@@ -1,67 +1,50 @@
 import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
+import { FormManager } from '../../script/form-manager.js';
+import { GoogleSheets } from '../../script/google-sheets/main.js';
 
 mainReady.then(() => {
+  const formManager = new FormManager('login-form', 'feedback');
+  const googleSheets = new GoogleSheets();
+
   const userUuid = localStorage.getItem('userUuid');
 
   if (userUuid !== null) {
     window.location.href = `${url.basePathname}page/clock-in`;
+    return;
   }
 
-  const GOOGLE_SCRIPT_URL = url.googleSheets;
-
-  const loginFormElement = /** @type {HTMLFormElement|null} */ (
-    document.getElementById('login-form')
-  );
-  const userUuidInputElement = /** @type {HTMLInputElement|null} */ (
-    document.getElementById('user-uuid-input')
-  );
+  const loginFormElement =
+    /** @type {HTMLFormElement|null} */
+    (document.getElementById('login-form'));
+  const userUuidInputElement =
+    /** @type {HTMLInputElement|null} */
+    (document.getElementById('user-uuid-input'));
 
   loginFormElement.onsubmit = function (e) {
     e.preventDefault();
 
-    const userUuid = userUuidInputElement.value.trim();
+    const { userUuid } = formManager.getData();
+
+    formManager.disable('login-form-submit');
 
     if (userUuid === '') {
-      showError('Please enter a valid user ID', loginFormElement);
+      formManager.showError('User identifier is required');
+      formManager.enable();
       return;
     }
 
-    document.getElementById('message').innerHTML = '&nbsp;';
+    googleSheets.login(userUuid).then((response) => {
+      if (response.success) {
+        localStorage.setItem('userUuid', userUuid);
+        localStorage.setItem('userName', response.data.name);
+        localStorage.setItem('userSurname', response.data.surname);
 
-    Array.from(loginFormElement.elements).forEach(
-      /** @param {HTMLInputElement} el */ (el) => (el.disabled = true)
-    );
-    document.getElementById('login-form-submit').classList.add('loading');
-
-    const body = new URLSearchParams({
-      action: 'login',
-      userUuid,
+        window.location.href = `${url.basePathname}page/clock-in`;
+      } else {
+        formManager.showError(response.error || 'User not found');
+        formManager.enable();
+      }
     });
-
-    fetch(`${GOOGLE_SCRIPT_URL}`, { method: 'POST', body })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.success) {
-          localStorage.setItem('userUuid', userUuid);
-          localStorage.setItem('userName', response.data.name);
-          localStorage.setItem('userSurname', response.data.surname);
-
-          window.location.href = `${url.basePathname}page/clock-in`;
-        } else {
-          showError(response.error || 'User not found', loginFormElement);
-        }
-      })
-      .catch(() => {
-        showError('Connection error', loginFormElement);
-      });
   };
-
-  function showError(message, form) {
-    const errorElement = document.getElementById('message');
-    errorElement.textContent = message;
-
-    Array.from(form.elements).forEach((el) => (el.disabled = false));
-    document.getElementById('login-form-submit').classList.remove('loading');
-  }
 });
