@@ -3,29 +3,36 @@ import { url } from '../../script/config.js';
 
 mainReady.then(() => {
   const userUuid = localStorage.getItem('userUuid');
-  
+
   if (userUuid !== null) {
     window.location.href = `${url.basePathname}page/clock-in`;
   }
 
   const GOOGLE_SCRIPT_URL = url.googleSheets;
 
-  document.getElementById('userForm').onsubmit = function (e) {
+  const loginFormElement = /** @type {HTMLFormElement|null} */ (
+    document.getElementById('login-form')
+  );
+  const userUuidInputElement = /** @type {HTMLInputElement|null} */ (
+    document.getElementById('user-uuid-input')
+  );
+
+  loginFormElement.onsubmit = function (e) {
     e.preventDefault();
 
-    const userUuid = document.getElementById('userUuid').value.trim();
+    const userUuid = userUuidInputElement.value.trim();
 
     if (userUuid === '') {
-      showError('Please enter a valid user ID', form);
+      showError('Please enter a valid user ID', loginFormElement);
       return;
     }
 
-    document.getElementById('errorMessage').innerHTML = '&nbsp;';
+    document.getElementById('message').innerHTML = '&nbsp;';
 
-    const form = document.getElementById('userForm');
-
-    Array.from(form.elements).forEach((el) => (el.disabled = true));
-    document.getElementById('userFormSubmit').classList.add('loading');
+    Array.from(loginFormElement.elements).forEach(
+      /** @param {HTMLInputElement} el */ (el) => (el.disabled = true)
+    );
+    document.getElementById('login-form-submit').classList.add('loading');
 
     const body = new URLSearchParams({
       action: 'login',
@@ -42,19 +49,19 @@ mainReady.then(() => {
 
           window.location.href = `${url.basePathname}page/clock-in`;
         } else {
-          showError(response.error || 'User not found', form);
+          showError(response.error || 'User not found', loginFormElement);
         }
       })
       .catch(() => {
-        showError('Connection error', form);
+        showError('Connection error', loginFormElement);
       });
   };
 
   function showError(message, form) {
-    const errorElement = document.getElementById('errorMessage');
+    const errorElement = document.getElementById('message');
     errorElement.textContent = message;
 
     Array.from(form.elements).forEach((el) => (el.disabled = false));
-    document.getElementById('userFormSubmit').classList.remove('loading');
+    document.getElementById('login-form-submit').classList.remove('loading');
   }
 });
