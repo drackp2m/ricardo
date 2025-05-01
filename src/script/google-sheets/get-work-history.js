@@ -2,6 +2,16 @@ import { url } from '../config.js';
 import { getWeekRangeFromYearAndWeek } from '../utils.js';
 import { WorkHistoryCache } from '../work-history-cache.js';
 
+/**
+ * @typedef {import('../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
+ */
+
+/**
+ * @param {number} year 
+ * @param {number} week 
+ * @param {boolean} useCache 
+ * @returns {Promise<GetEntriesBetweenDatesResponse[]>}
+ */
 export async function getWorkHistory(year, week, useCache) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
   const userUuid = localStorage.getItem('userUuid');
@@ -22,14 +32,14 @@ export async function getWorkHistory(year, week, useCache) {
 
   const { from, to } = getWeekRangeFromYearAndWeek(year, week);
 
-  const body = new URLSearchParams({
+  const request = new URLSearchParams({
     action: 'getEntriesBetweenDates',
     userUuid,
     from,
     to,
   });
 
-  const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body });
+  const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: request });
   const { entries } = await response.json();
 
   WorkHistoryCache.set(year, week, entries);

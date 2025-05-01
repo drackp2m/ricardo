@@ -10,8 +10,13 @@ mainReady.then(async () => {
   const formManager = new FormManager('work-history-form');
   formManager.disable();
 
+  const showWorkedHoursInput = /** @type {HTMLInputElement} */ (
+    document.getElementById('show-worked-hours-input')
+  );
+
+  /** @type {'range'|'total'} */
   let currentMode = 'range';
-  const ctx = document.getElementById('myChart').getContext('2d');
+  const ctx = /** @type {HTMLCanvasElement} */ (document.getElementById('chart')).getContext('2d');
 
   let { year: currentYear, week: currentWeek } = getCurrentYearAndWeek();
 
@@ -25,8 +30,9 @@ mainReady.then(async () => {
 
   formManager.enable();
 
-  document.getElementById('showWorkedHours').addEventListener('change', (e) => {
-    currentMode = e.target.checked ? 'total' : 'range';
+  showWorkedHoursInput.addEventListener('change', (event) => {
+    const input = /** @type {HTMLInputElement} */ (event.target);
+    currentMode = input.checked ? 'total' : 'range';
     chartManager.setMode(currentMode);
   });
 
@@ -42,11 +48,14 @@ mainReady.then(async () => {
     updateChartAndHtmlInfo(true);
   });
 
+  /**
+   * @param {boolean} nextWeek 
+   */
   async function updateChartAndHtmlInfo(nextWeek) {
     const weeksNumberInCurrentYear = getWeeksNumberByYear(currentYear);
-    const weekLimit = nextWeek ? weeksNumberInCurrentYear : 1;
-    const weekLimitOverflowNewValue = nextWeek ? 1 : weeksNumberInCurrentYear;
-    const modification = nextWeek ? 1 : -1;
+    const weekLimit = nextWeek === true ? weeksNumberInCurrentYear : 1;
+    const weekLimitOverflowNewValue = nextWeek === true ? 1 : weeksNumberInCurrentYear;
+    const modification = nextWeek === true ? 1 : -1;
 
     if (currentWeek === weekLimit) {
       currentYear += modification;

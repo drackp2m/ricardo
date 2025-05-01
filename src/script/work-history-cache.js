@@ -1,6 +1,6 @@
 /**
- * @typedef {import('../script/google-sheets/main.js').PageData} PageData
- * @typedef {{ cachedAt: Date, data: PageData[] }} WorkHistoryCache
+ * @typedef {import('../script/google-sheets/main.js').GetEntriesBetweenDatesResponse} PageData
+ * @typedef {{ cachedAt: Date, data: PageData[] }} WorkHistoryCacheData
  */
 
 export class WorkHistoryCache {
@@ -9,7 +9,7 @@ export class WorkHistoryCache {
   /**
    * @param {number} year
    * @param {number} week
-   * @param {PageData} data
+   * @param {PageData[]} data
    */
   static set(year, week, data) {
     const all = WorkHistoryCache.getAll();
@@ -23,7 +23,7 @@ export class WorkHistoryCache {
   /**
    * @param {number} year
    * @param {number} week
-   * @returns {WorkHistoryCache|null}
+   * @returns {WorkHistoryCacheData|null}
    */
   static get(year, week) {
     const all = WorkHistoryCache.getAll();
@@ -34,7 +34,7 @@ export class WorkHistoryCache {
   }
 
   /**
-   * @returns {Object<string, WorkHistoryCache>}
+   * @returns {Object<string, WorkHistoryCacheData>}
    */
   static getAll() {
     const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
@@ -53,7 +53,7 @@ export class WorkHistoryCache {
   /**
    * @param {number} year
    * @param {number} week
-   * @returns {boolean}
+   * @returns {void}
    */
   static delete(year, week) {
     const all = WorkHistoryCache.getAll();

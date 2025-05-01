@@ -5,7 +5,7 @@ import { formatDateToString } from '../../../script/utils.js';
 export class ChartManager {
   /**
    * @param {CanvasRenderingContext2D} ctx
-   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
    * @param {'range'|'total'} mode
    */
   constructor(ctx, entries, mode = 'range') {
@@ -30,7 +30,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
    */
   updateData(entries) {
     this.entries = entries;
@@ -42,7 +42,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
    */
   #computeLabels(entries) {
     return entries.map((entry) =>
@@ -51,7 +51,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').PageData[]} entries
+   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
    */
   #computeDataModes(entries) {
     return {
@@ -61,7 +61,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').PageData} entry
+   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse} entry
    * @param {'range'|'total'} mode
    * @returns {number[]|number|null[]|null}
    */
