@@ -3,14 +3,19 @@ import { getWeekRangeFromYearAndWeek } from '../utils.js';
 import { WorkHistoryCache } from '../work-history-cache.js';
 
 /**
+ * @template T
+ * @typedef {import('../../definition/google-sheets/google-sheets.response.mjs').GoogleSheetsResponse<T>} GoogleSheetsResponse<T>
+ */
+
+/**
  * @typedef {import('../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
  */
 
 /**
- * @param {number} year 
- * @param {number} week 
- * @param {boolean} useCache 
- * @returns {Promise<GetEntriesBetweenDatesResponse[]>}
+ * @param {number} year
+ * @param {number} week
+ * @param {boolean} useCache
+ * @returns {Promise<GoogleSheetsResponse<GetEntriesBetweenDatesResponse[]>>}
  */
 export async function getWorkHistory(year, week, useCache) {
   const GOOGLE_SCRIPT_URL = url.googleSheets;
@@ -19,14 +24,14 @@ export async function getWorkHistory(year, week, useCache) {
   if (userUuid === null) {
     window.location.href = url.basePathname;
 
-    return [];
+    return { success: false, error: 'User UUID is null' };
   }
 
   if (useCache === true) {
     const cached = WorkHistoryCache.get(year, week);
 
     if (cached) {
-      return cached.data;
+      return { success: true, data: cached.data };
     }
   }
 
@@ -39,10 +44,14 @@ export async function getWorkHistory(year, week, useCache) {
     to,
   });
 
-  const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: request });
-  const { entries } = await response.json();
-
-  WorkHistoryCache.set(year, week, entries);
-
-  return entries;
+  return await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: request })
+    .then((res) => res.json())
+    .then((response) => {
+      WorkHistoryCache.set(year, week, response.data);
+    
+      return response;
+    })
+    .catch((error) => {
+      return { success: false, error: error.message };
+    });
 }

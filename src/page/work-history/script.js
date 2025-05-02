@@ -2,7 +2,7 @@ import { setInfoToHtml } from './script/utils.js';
 import { ChartManager } from './script/chart-manager.js';
 
 import { mainReady } from '../../script.js';
-import { getWeeksNumberByYear, getCurrentYearAndWeek } from '../../script/utils.js';
+import { getWeeksNumberByYear, getYearAndWeekByDate } from '../../script/utils.js';
 import { GoogleSheets } from '../../script/google-sheets/main.js';
 import { FormManager } from '../../script/form-manager.js';
 
@@ -18,7 +18,7 @@ mainReady.then(async () => {
   let currentMode = 'range';
   const ctx = /** @type {HTMLCanvasElement} */ (document.getElementById('chart')).getContext('2d');
 
-  let { year: currentYear, week: currentWeek } = getCurrentYearAndWeek();
+  let { year: currentYear, week: currentWeek } = getYearAndWeekByDate();
 
   const googleSheets = new GoogleSheets();
 
@@ -26,7 +26,7 @@ mainReady.then(async () => {
 
   setInfoToHtml(currentYear, currentWeek);
 
-  const chartManager = new ChartManager(ctx, entries, currentMode);
+  const chartManager = new ChartManager(ctx, entries.data, currentMode);
 
   formManager.enable();
 
@@ -68,7 +68,7 @@ mainReady.then(async () => {
 
     setInfoToHtml(currentYear, currentWeek);
 
-    chartManager.updateData(entries);
+    chartManager.updateData(entries.data);
 
     formManager.enable();
   }

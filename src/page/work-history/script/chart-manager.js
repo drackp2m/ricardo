@@ -2,6 +2,9 @@ import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
 import { formatDateToString } from '../../../script/utils.js';
 
+// @ts-ignore
+const Chart = window.Chart;
+
 export class ChartManager {
   /**
    * @param {CanvasRenderingContext2D} ctx
@@ -81,7 +84,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {string} hhmm 
+   * @param {string} hhmm
    * @returns {number|null}
    */
   #parseHourToDecimal(hhmm) {
@@ -108,14 +111,14 @@ export class ChartManager {
 
       return [Math.floor(Math.min(...all)), Math.ceil(Math.max(...all))];
     } else {
-      const all = this.dataModes.total.filter((x) => x !== null);
+      const all = /** @type {number[]} */ (this.dataModes.total.filter((x) => x !== null));
 
       return [0, Math.ceil(Math.max(...all, 8))];
     }
   }
 
   /**
-   * @param {number} decimalHour 
+   * @param {number} decimalHour
    * @returns {string}
    */
   #formatHour(decimalHour) {

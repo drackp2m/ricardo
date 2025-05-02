@@ -26,28 +26,28 @@ export function getWeekDaysByOffset(weekOffset = 0, toTodayOnly = false) {
 }
 
 /**
- * @param {Date} date
+ * @param {Date} [date]
  * @returns {number}
  */
-export function getWeekNumberByDate(date) {
+export function getWeekNumberByDate(date = new Date()) {
   const day = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = day.getUTCDay() || 7;
 
   day.setUTCDate(day.getUTCDate() + 4 - dayNum);
 
   const yearStart = new Date(Date.UTC(day.getUTCFullYear(), 0, 1));
-  const weekNum = Math.ceil(((day - yearStart) / 86400000 + 1) / 7);
+  const weekNum = Math.ceil(((day.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 
   return weekNum;
 }
 
 /**
+ * @param {Date} [date]
  * @returns {{ year: number, week: number }}
  */
-export function getCurrentYearAndWeek() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const week = getWeekNumberByDate(today);
+export function getYearAndWeekByDate(date = new Date()) {
+  const year = date.getFullYear();
+  const week = getWeekNumberByDate(date);
 
   return { year, week };
 }
@@ -82,6 +82,10 @@ export function getWeekRangeFromYearAndWeek(year, week) {
  * @returns {number}
  */
 export function getWeeksNumberByYear(year) {
+  /**
+   * @param {Date} date
+   * @returns {number}
+   */
   function getWeekYear(date) {
     date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -94,7 +98,7 @@ export function getWeeksNumberByYear(year) {
   while (getWeekYear(date) !== year) {
     date.setUTCDate(date.getUTCDate() - 1);
   }
-  
+
   return getWeekNumberByDate(date);
 }
 
@@ -113,10 +117,11 @@ export function formatDateToISO8601(date) {
 }
 
 /**
- * @param {Date} date 
+ * @param {Date} date
  * @returns {string}
  */
 export function formatDateToString(date) {
+  /** @type {Intl.DateTimeFormatOptions} */
   const localeDateStringOptions = { year: 'numeric', month: 'short', day: '2-digit' };
 
   return date.toLocaleDateString('en-US', localeDateStringOptions);

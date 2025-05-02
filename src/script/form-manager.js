@@ -30,8 +30,6 @@ export class FormManager {
   getData() {
     const formData = new FormData(this.#formElement);
 
-    console.log({ formData: this.#formElement });
-
     /** @type {Object} */
     const data = {};
 

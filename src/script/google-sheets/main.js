@@ -1,5 +1,6 @@
 import { login } from './login.js';
 import { getWorkHistory } from './get-work-history.js';
+import { registerEntry } from './register-entry.js';
 
 /**
  * @template T
@@ -14,6 +15,7 @@ import { getWorkHistory } from './get-work-history.js';
 export class GoogleSheets {
   /** @type {Map<string, Promise<any>>} */
   ongoingRequests = new Map();
+  userData = null;
 
   /**
    * @param {string} userUuid
@@ -24,22 +26,36 @@ export class GoogleSheets {
 
     const resultPromise = this.#deduplicateRequest(requestKey, () => login(userUuid));
 
-    resultPromise
-      .then((userInfo) => {
-        this.userInfo = userInfo;
-      })
-      .catch(() => {
-        this.userInfo = null;
-      });
+    const that = this;
+
+    resultPromise.then((response) => {
+      if (response.success === false) {
+        that.userData = null;
+      } else {
+        that.userData = response.data;
+      }
+    });
 
     return resultPromise;
+  }
+
+  /**
+   * @param {string} date
+   * @param {string} entryTime
+   * @param {string} exitTime
+   * @returns {Promise<GoogleSheetsResponse<undefined>>}
+   */
+  async registerEntry(date, entryTime, exitTime) {
+    const requestKey = `registerEntry-${date}-${entryTime}-${exitTime}`;
+
+    return this.#deduplicateRequest(requestKey, () => registerEntry(date, entryTime, exitTime));
   }
 
   /**
    * @param {number} year
    * @param {number} week
    * @param {boolean} [useCache]
-   * @returns {Promise<GetEntriesBetweenDatesResponse[]>}
+   * @returns {Promise<GoogleSheetsResponse<GetEntriesBetweenDatesResponse[]>>}
    */
   async getWorkHistory(year, week, useCache = true) {
     const requestKey = `getWorkHistory-${year}-${week}-${useCache}`;
