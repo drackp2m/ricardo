@@ -7,13 +7,6 @@ mainReady.then(() => {
   const formManager = new FormManager('login-form', 'feedback');
   const googleSheets = new GoogleSheets();
 
-  const userUuid = localStorage.getItem('userUuid');
-
-  if (userUuid !== null) {
-    window.location.href = `${url.basePathname}page/clock-in`;
-    return;
-  }
-
   const loginFormElement =
     /** @type {HTMLFormElement|null} */
     (document.getElementById('login-form'));
