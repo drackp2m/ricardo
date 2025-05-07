@@ -1,8 +1,8 @@
-function postRegisterEntry(e) {
-  var userUuid = e.parameter.userUuid;
-  var date = e.parameter.date;
-  var entryTime = e.parameter.entryTime;
-  var exitTime = e.parameter.exitTime;
+function postRegisterEntry(request) {
+  var userUuid = request.userUuid;
+  var date = request.date;
+  var entryTime = request.entryTime;
+  var exitTime = request.exitTime;
 
   if (!userUuid || !date || !entryTime || !exitTime) {
     return ContentService.createTextOutput(

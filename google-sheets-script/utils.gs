@@ -1,3 +1,35 @@
+function verifyGoogleToken(token, clientId) {
+  try {
+    const parts = token.split('.');
+    
+    if (parts.length !== 3) {
+      return { success: false, message: "Invalid token format" };
+    }
+
+    const payload = JSON.parse(Utilities.newBlob(
+      Utilities.base64DecodeWebSafe(parts[1])).getDataAsString());
+
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp < now) {
+      return { success: false, message: "Token expired" };
+    }
+
+    if (payload.aud !== clientId) {
+      return { success: false, message: "Client ID don't match" };
+    }
+
+    if (payload.iss !== "https://accounts.google.com" &&
+      payload.iss !== "accounts.google.com") {
+      return { success: false, message: "Invalid emitter" };
+    }
+
+    return { success: true, payload: payload };
+
+  } catch (error) {
+    return { success: false, message: "Error verifying the token: " + error.toString() };
+  }
+}
+
 function getUserDescriptionByUuid(uuid) {
   var usersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('users');
   var usersData = usersSheet.getDataRange().getValues();
@@ -51,4 +83,14 @@ function insertInOut(sheet, day, inTime, outTime) {
   sheet.getRange(dayRow, 3).setValue(inTime);
   sheet.getRange(dayRow, 4).setValue(outTime);
   sheet.getRange(dayRow, 7).setValue(now);
+}
+
+function formatTime(cellValue) {
+  if (cellValue instanceof Date) {
+    var hours = cellValue.getHours().toString().padStart(2, '0');
+    var minutes = cellValue.getMinutes().toString().padStart(2, '0');
+    return hours + ':' + minutes;
+  }
+
+  return cellValue || "";
 }

@@ -1,6 +1,7 @@
 import { login } from './login.js';
 import { getWorkHistory } from './get-work-history.js';
 import { registerEntry } from './register-entry.js';
+import { registerWithGoogle } from './register-with-google.js';
 
 /**
  * @template T
@@ -16,6 +17,17 @@ export class GoogleSheets {
   /** @type {Map<string, Promise<any>>} */
   ongoingRequests = new Map();
   userData = null;
+
+  /**
+   * @param {string} clientId
+   * @param {string} credential
+   * @returns {Promise<Object>}
+   */
+  async registerWithGoogle(clientId, credential) {
+    const requestKey = `registerWithGoogle-${credential}`;
+
+    return this.#deduplicateRequest(requestKey, () => registerWithGoogle(clientId, credential));
+  }
 
   /**
    * @param {string} userUuid

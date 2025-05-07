@@ -1,5 +1,5 @@
-function postLogin(e) {
-  var userUuid = e.parameter.userUuid;
+function postLogin(request) {
+  var userUuid = request.userUuid;
 
   if (!userUuid) {
     return ContentService.createTextOutput(
@@ -15,9 +15,10 @@ function postLogin(e) {
       return ContentService.createTextOutput(
         JSON.stringify({
           success: true,
-          name: data[i][0],
-          surname: data[i][1],
-          uuid: data[i][3]
+          data: {
+            name: data[i][0],
+            surname: data[i][1]
+          }
         })
       ).setMimeType(ContentService.MimeType.JSON);
     }
