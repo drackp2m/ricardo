@@ -10,15 +10,25 @@ function registerWithGoogle(request) {
 
   const userData = tokenInfo.payload;
 
-  const userRecord = createUserRecord(userData);
+  let user = findUserBy('email', userData.email);
 
-  insertUser(userRecord);
+  if (user === null) {
+    const user = createUserRecord(userData);
 
-  const jwt = createJWT({ sub: userRecord.uuid });
+    try {
+      insertUser(user);
+    } catch (error) {
+      if (error.message !== 'error_adding_user.already_exists') {
+        throw new Error(`error_google_register:${error.message}`);
+      }
+    }
+  }
+
+  const { authToken, refreshToken } = createAuthTokens(user.uuid);
 
   return ContentService.createTextOutput(JSON.stringify({
     success: true,
-    data: { jwt }
+    data: { authToken, refreshToken }
   })).setMimeType(ContentService.MimeType.JSON);
 }
 

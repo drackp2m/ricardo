@@ -8,7 +8,7 @@ import { getYearAndWeekByDate } from './script/utils.js';
 const AuthStatus = {
   CHECKING_LOCAL: 'checking-local',
   CHECKING_REMOTE: 'checking-remote',
-  LOADING_DATA: 'loading-data'
+  LOADING_DATA: 'loading-data',
 };
 
 export const mainReady = (async function () {
@@ -64,36 +64,46 @@ async function handleAuthentication() {
     return;
   }
 
-  const initialSessionActiveChecked = sessionStorage.getItem('initialSessionActive') !== null;
-  const isSessionActive = localStorage.getItem('userUuid') !== null;
+  const authToken = localStorage.getItem('authToken');
 
-  if (initialSessionActiveChecked) {
+  const initialSessionActiveChecked = sessionStorage.getItem('initialSessionActive') !== null;
+  const isSessionActive = authToken !== null;
+
+  if (!initialSessionActiveChecked) {
+    sessionStorage.setItem('initialSessionActive', 'true');
+
     redirectBasedOnSession(isSessionActive);
     return;
   }
 
-  sessionStorage.setItem('initialSessionActive', 'true');
-  
   updateUIStatus(AuthStatus.CHECKING_LOCAL);
-  
-  const userUuid = localStorage.getItem('userUuid');
-  if (!userUuid) {
+
+  if (authToken === null) {
     redirectTo('page/login');
     return;
   }
 
   updateUIStatus(AuthStatus.CHECKING_REMOTE);
   const googleSheets = new GoogleSheets();
-  const loginResponse = await googleSheets.login(userUuid);
+  const userData = await googleSheets.getUserData();
 
-  if (!loginResponse.success) {
+  console.log({ userData });
+  
+
+  return;
+
+  console.log(JSON.stringify(userData));
+  redirectTo('page/clock-in');
+  return;
+
+  if (!userData.success) {
     clearUserSession();
     redirectTo('page/login');
     return;
   }
 
-  saveUserData(loginResponse.data);
-  
+  saveUserData(userData.data);
+
   updateUIStatus(AuthStatus.LOADING_DATA);
   const { year, week } = getYearAndWeekByDate();
   await googleSheets.getWorkHistory(year, week, false);
@@ -122,25 +132,27 @@ function updateUIStatus(status) {
 }
 
 /**
- * @param {boolean} isActive 
+ * @param {boolean} isActive
  */
 function redirectBasedOnSession(isActive) {
   const destination = isActive ? 'page/clock-in' : 'page/login';
+
   redirectTo(destination);
 }
 
 /**
- * @param {string} path 
+ * @param {string} path
  */
 function redirectTo(path) {
   if (!path.startsWith(url.basePathname) && !path.startsWith('http')) {
     path = `${url.basePathname}${path}`;
   }
+
   window.location.href = path;
 }
 
 /**
- * @param {Object} userData 
+ * @param {Object} userData
  */
 function saveUserData(userData) {
   localStorage.setItem('userName', userData.name);

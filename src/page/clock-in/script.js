@@ -6,8 +6,6 @@ import { formatDateToISO8601, getYearAndWeekByDate } from '../../script/utils.js
 import { WorkHistoryCache } from '../../script/work-history-cache.js';
 
 mainReady.then(() => {
-  const userUuid = localStorage.getItem('userUuid');
-
   const formManager = new FormManager('clock-in-form', 'feedback');
   const googleSheets = new GoogleSheets();
 

@@ -37,6 +37,16 @@ function findUserBy(field, value) {
 
 function insertUser(user) {
   try {
+    const alreadyUser = findUserBy('uuid', user.uuid);
+
+    if (alreadyUser !== null) {
+      throw new Error(`error_adding_user.already_exists`);
+    }
+  } catch (error) {
+    throw new Error(`error_adding_user.${error.message}`);
+  }
+
+  try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName("users");
 
@@ -44,24 +54,10 @@ function insertUser(user) {
       throw new Error("error_sheet_not_found.users");
     }
 
-    const row = [
-      user.uuid,
-      user.name,
-      user.surname,
-      user.nick,
-      user.rol,
-      user.email,
-      user.password,
-      user.google_id,
-      user.status,
-      user.login_method,
-      user.created_at,
-      user.updated_at,
-      user.last_login
-    ];
+    const row = Object.values(user);
 
     sheet.appendRow(row);
   } catch (error) {
-    throw new Error(`error_adding_user.${error.toString()}`);
+    throw new Error(`error_adding_user.${error.message}`);
   }
 }

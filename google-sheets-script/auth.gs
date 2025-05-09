@@ -86,3 +86,10 @@ function verifyJWT(token) {
 
   return payload;
 }
+
+function createAuthTokens(sub) {
+  const authToken = createJWT({ sub }, 0, 0.015);
+  const refreshToken = createJWT({ sub }, 0.015, 0.15);
+
+  return { authToken, refreshToken };
+}

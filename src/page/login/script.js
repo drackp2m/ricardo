@@ -3,10 +3,20 @@ import { url } from '../../script/config.js';
 import { FormManager } from '../../script/form-manager.js';
 import { GoogleSheets } from '../../script/google-sheets/main.js';
 
-// @ts-ignore
-window.handleGoogleLogin = function (response) {
-  console.log('Google login response received:', response);
+/**
+ * @typedef GoogleLoginResponse
+ * @property {string} clientId
+ * @property {string} client_id
+ * @property {string} credential
+ * @property {string} select_by
+ */
 
+/**
+ * @param {GoogleLoginResponse} response 
+ * @returns {void}
+ */
+//@ts-ignore
+window.handleGoogleLogin = function (response) {
   const clientId = response.clientId;
   const credential = response.credential;
 
@@ -17,30 +27,24 @@ window.handleGoogleLogin = function (response) {
 
   googleSheets.registerWithGoogle(clientId, credential).then((response) => {
     if (response.success) {
-      // localStorage.setItem('userUuid', response.data.uuid);
-      // localStorage.setItem('userName', response.data.name);
-      // localStorage.setItem('userSurname', response.data.surname);
-      // localStorage.setItem('userEmail', response.data.email);
-      // localStorage.setItem('userPicture', response.data.picture);
-      // localStorage.setItem('loginMethod', 'google');
-
-      if (response.data.status === 'PENDING') {
-        formManager.showSuccess('Tu cuenta está pendiente de aprobación por un administrador.');
-        setTimeout(() => {
-          window.location.href = `${url.basePathname}`;
-        }, 3000);
-        return;
-      }
+      localStorage.setItem('authToken', response.data.authToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
 
       window.location.href = `${url.basePathname}page/clock-in`;
     } else {
-      formManager.showError(response.error || 'Error en la autenticación con Google');
+      formManager.showError(response.error || 'Google login failed');
       formManager.enable();
     }
   });
 };
 
 mainReady.then(() => {
+  const hasAuthToken = localStorage.getItem('authToken');
+
+  if (hasAuthToken) {
+    window.location.href = `${url.basePathname}page/clock-in`;
+  }
+
   const formManager = new FormManager('login-form', 'feedback');
   const googleSheets = new GoogleSheets();
 
