@@ -23,7 +23,7 @@ function verifyPassword(password, storedHash) {
   return hash === storedHash;
 }
 
-function createJWT(payload, issuedAt = 0, expirationHours = 48) {
+function createJWT(payload, issuedAt, expirationHours) {
   const scriptProperties = PropertiesService.getScriptProperties();
   const secretKey = scriptProperties.getProperty('JWT_SECRET_KEY');
 
@@ -88,8 +88,11 @@ function verifyJWT(token) {
 }
 
 function createAuthTokens(sub) {
-  const authToken = createJWT({ sub }, 0, 0.015);
-  const refreshToken = createJWT({ sub }, 0.015, 0.15);
+  const fifteenMinutes = 0.25;
+  const fiveDays = 120;
+
+  const authToken = createJWT({ sub }, 0, fifteenMinutes);
+  const refreshToken = createJWT({ sub }, fifteenMinutes, fiveDays);
 
   return { authToken, refreshToken };
 }

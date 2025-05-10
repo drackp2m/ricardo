@@ -1,10 +1,10 @@
 function handlePost({ parameter }) {
   const action = parameter.action || 'unknown';
 
-  const notNeedTokenActions = ['registerWithGoogle', 'refreshAuthTokens'];
+  const notNeededTokenActions = ['register', 'login', 'loginWithGoogle', 'refreshAuthTokens'];
 
   try {
-    if (notNeedTokenActions.includes(action) === false) {
+    if (notNeededTokenActions.includes(action) === false) {
       if (!parameter.authToken) {
         throw new Error(`error_required_parameter.authToken`);
       }
@@ -23,10 +23,12 @@ function handlePost({ parameter }) {
     }
 
     switch (action) {
-      case 'registerWithGoogle':
-        return registerWithGoogle(parameter);
+      case 'register':
+        return register(parameter);
       case 'login':
         return postLogin(parameter);
+      case 'loginWithGoogle':
+        return loginWithGoogle(parameter);
       case 'refreshAuthTokens':
         return refreshAuthTokens(parameter);
       case 'getUserData':

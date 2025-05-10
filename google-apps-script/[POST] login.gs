@@ -12,19 +12,7 @@ function postLogin(request) {
 
   for (var i = 1; i < data.length; i++) {
     if (data[i][3] == userUuid) {
-      return ContentService.createTextOutput(
-        JSON.stringify({
-          success: true,
-          data: {
-            name: data[i][0],
-            surname: data[i][1]
-          }
-        })
-      ).setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({ name: data[i][0], surname: data[i][1] });
     }
   }
-
-  return ContentService.createTextOutput(
-    JSON.stringify({ success: false, error: 'UUID not found' })
-  ).setMimeType(ContentService.MimeType.JSON);
 }
