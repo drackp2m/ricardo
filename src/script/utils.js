@@ -126,3 +126,24 @@ export function formatDateToString(date) {
 
   return date.toLocaleDateString('en-US', localeDateStringOptions);
 }
+
+/**
+ * @param {string} targetPath
+ * @param {string[]} routePatterns
+ * @returns {boolean}
+ */
+export function isPathInRouteList(targetPath, routePatterns) {
+  const currentUrl = new URL(targetPath, window.location.origin);
+  const normalizedCurrentPath = currentUrl.pathname;
+
+  return routePatterns.some((baseRoute) => {
+    if (baseRoute.includes('*')) {
+      const regexPattern = baseRoute.replace(/\*/g, '.*');
+      const regex = new RegExp(`^${regexPattern}$`);
+
+      return regex.test(normalizedCurrentPath);
+    }
+
+    return normalizedCurrentPath === baseRoute || normalizedCurrentPath.startsWith(`${baseRoute}/`);
+  });
+}

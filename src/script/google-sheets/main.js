@@ -1,9 +1,6 @@
-import { login } from './login.js';
+import { httpClient } from '../http-client.js';
+
 import { getWorkHistory } from './get-work-history.js';
-import { registerEntry } from './register-entry.js';
-import { registerWithGoogle } from './register-with-google.js';
-import { getUserData } from './get-user-data.js';
-import { refreshToken } from './refresh-token.js';
 
 /**
  * @template T
@@ -12,7 +9,6 @@ import { refreshToken } from './refresh-token.js';
 
 /**
  * @typedef {import('../../definition/google-sheets/login.response.mjs').LoginResponse} LoginResponse
- * @typedef {import('../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
  */
 
 export class GoogleSheets {
@@ -21,74 +17,87 @@ export class GoogleSheets {
   userData = null;
 
   /**
+   *
+   * @param {string} name
+   * @param {string} surname
+   * @param {string} email
+   * @param {string} password
+   * @param {string} confirmPassword
+   */
+  register(name, surname, email, password, confirmPassword) {
+    return httpClient.request({
+      action: 'register',
+      name,
+      surname,
+      email,
+      password,
+      confirmPassword,
+    })
+  }
+
+  /**
+   * @typedef {import('../../definition/google-sheets/login-with-google.response.mjs').LoginWithGoogleResponse} LoginWithGoogleResponse
+   *
    * @param {string} clientId
    * @param {string} credential
-   * @returns {Promise<GoogleSheetsResponse<Object>>}
+   * @returns {Promise<GoogleSheetsResponse<LoginWithGoogleResponse>>}
    */
-  registerWithGoogle(clientId, credential) {
-    return registerWithGoogle(clientId, credential);
+  loginWithGoogle(clientId, credential) {
+    return httpClient.request({
+      action: 'loginWithGoogle',
+      clientId,
+      credential,
+    });
   }
 
   /**
    * @param {string} userUuid
    * @returns {Promise<GoogleSheetsResponse<LoginResponse>>}
    */
-  login(userUuid) {
-    const requestKey = `login-${userUuid}`;
-
-    const resultPromise = this.#deduplicateRequest(requestKey, () => login(userUuid));
-
-    const that = this;
-
-    resultPromise.then((response) => {
-      if (response.success === false) {
-        that.userData = null;
-      } else {
-        that.userData = response.data;
-      }
+  async login(userUuid) {
+    const response = await httpClient.request({
+      action: 'login',
+      userUuid,
     });
 
-    return resultPromise;
+    if (response.success === false) {
+      this.userData = null;
+    } else {
+      this.userData = response.data;
+    }
+
+    return response;
   }
 
   /**
-   * @returns {Promise<GoogleSheetsResponse<unknown>>}
-   */
-  refreshToken() {
-    const requestKey = `refreshToken`;
-
-    return this.#deduplicateRequest(requestKey, () => refreshToken());
-  }
-
-  /**
-   * @returns {Promise<GoogleSheetsResponse<{}>>}
+   * @typedef {import('../../definition/google-sheets/get-user-data.response.mjs').GetUserDataResponse} GetUserDataResponse
+   *
+   * @returns {Promise<GoogleSheetsResponse<GetUserDataResponse>>}
    */
   getUserData() {
-    return getUserData();
+    return httpClient.request({ action: 'getUserData' });
   }
 
   /**
    * @param {string} date
    * @param {string} entryTime
    * @param {string} exitTime
-   * @returns {Promise<GoogleSheetsResponse<undefined>>}
+   * @returns {Promise<GoogleSheetsResponse<void>>}
    */
   registerEntry(date, entryTime, exitTime) {
-    const requestKey = `registerEntry-${date}-${entryTime}-${exitTime}`;
-
-    return this.#deduplicateRequest(requestKey, () => registerEntry(date, entryTime, exitTime));
+    return httpClient.request({ action: 'registerEntry', date, entryTime, exitTime });
   }
 
   /**
+   * @typedef {import('../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
+   *
    * @param {number} year
    * @param {number} week
    * @param {boolean} [useCache]
    * @returns {Promise<GoogleSheetsResponse<GetEntriesBetweenDatesResponse[]>>}
    */
   getWorkHistory(year, week, useCache = true) {
-    const requestKey = `getWorkHistory-${year}-${week}-${useCache}`;
-
-    return this.#deduplicateRequest(requestKey, () => getWorkHistory(year, week, useCache));
+    return getWorkHistory(year, week, useCache);
   }
 
   /**

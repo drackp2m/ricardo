@@ -1,5 +1,4 @@
 import { mainReady } from '../../script.js';
-import { url } from '../../script/config.js';
 import { FormManager } from '../../script/form-manager.js';
 import { GoogleSheets } from '../../script/google-sheets/main.js';
 import { formatDateToISO8601, getYearAndWeekByDate } from '../../script/utils.js';
@@ -33,8 +32,6 @@ mainReady.then(() => {
 
   dateInputElement.value = formatDateToISO8601(now);
 
-  const GOOGLE_SCRIPT_URL = url.googleSheets;
-
   clockInFormElement.onsubmit = function (e) {
     e.preventDefault();
 
@@ -46,6 +43,7 @@ mainReady.then(() => {
 
     googleSheets.registerEntry(date, entryTime, exitTime).then((response) => {
       if (response.success === false) {
+        formManager.enable();
         formManager.showError(response.error || 'Unknown error');
       } else {
         const { year, week } = getYearAndWeekByDate(new Date(date));
@@ -57,7 +55,6 @@ mainReady.then(() => {
 
         formManager.reset();
         formManager.enable();
-
         formManager.showSuccess('Entry registered successfully');
       }
     });

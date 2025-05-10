@@ -25,7 +25,7 @@ window.handleGoogleLogin = function (response) {
 
   formManager.disable('login-form-submit');
 
-  googleSheets.registerWithGoogle(clientId, credential).then((response) => {
+  googleSheets.loginWithGoogle(clientId, credential).then((response) => {
     if (response.success) {
       localStorage.setItem('authToken', response.data.authToken);
       localStorage.setItem('refreshToken', response.data.refreshToken);

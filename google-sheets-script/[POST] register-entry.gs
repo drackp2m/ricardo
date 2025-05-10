@@ -1,46 +1,25 @@
-function postRegisterEntry(request) {
-  var userUuid = request.userUuid;
-  var date = request.date;
-  var entryTime = request.entryTime;
-  var exitTime = request.exitTime;
+function postRegisterEntry({ userUuid, date, entryTime, exitTime }) {
+  checkMissingParameters({ date, entryTime, exitTime })
 
-  if (!userUuid || !date || !entryTime || !exitTime) {
-    return ContentService.createTextOutput(
-      JSON.stringify({ success: false, error: 'Missing parameters' })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
+  const { nick } = findUserBy('uuid', userUuid);
 
-  var description = getUserDescriptionByUuid(userUuid);
-  
-  if (!description) {
-    return ContentService.createTextOutput(
-      JSON.stringify({ success: false, error: 'Invalid userUuid' })
-    ).setMimeType(ContentService.MimeType.JSON);
+  if (nick === undefined) {
+    throw new Error(`error_not_found.user`);
   }
 
   var dateObj = new Date(date);
 
   if (isNaN(dateObj)) {
-    return ContentService.createTextOutput(
-      JSON.stringify({ success: false, error: 'Invalid date format' })
-    ).setMimeType(ContentService.MimeType.JSON);
+    throw new Error(`error_invalid_format.date`);
   }
 
   var year = dateObj.getFullYear();
   var month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
   var day = dateObj.getDate();
 
-  try {
-    var sheet = ensureUserMonthSheet(year, month, description);
-    
-    insertInOut(sheet, day, entryTime, exitTime);
+  var sheet = ensureUserMonthSheet(year, month, nick);
 
-    return ContentService.createTextOutput(
-      JSON.stringify({ success: true })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(
-      JSON.stringify({ success: false, error: err.message })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
+  insertInOut(sheet, day, entryTime, exitTime);
+
+  return jsonResponse();
 }

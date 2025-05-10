@@ -32,32 +32,35 @@ function findUserBy(field, value) {
     }
   }
 
-  return null;
+  throw new Error('error_not_found.user');
 }
 
 function insertUser(user) {
-  try {
-    const alreadyUser = findUserBy('uuid', user.uuid);
+  const alreadyUser = findUserBy('uuid', user.uuid);
 
-    if (alreadyUser !== null) {
-      throw new Error(`error_adding_user.already_exists`);
-    }
-  } catch (error) {
-    throw new Error(`error_adding_user.${error.message}`);
+  if (alreadyUser !== null) {
+    throw new Error(`error_adding_user.already_exists`);
   }
 
-  try {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("users");
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("users");
 
-    if (!sheet) {
-      throw new Error("error_sheet_not_found.users");
-    }
-
-    const row = Object.values(user);
-
-    sheet.appendRow(row);
-  } catch (error) {
-    throw new Error(`error_adding_user.${error.message}`);
+  if (!sheet) {
+    throw new Error("error_sheet_not_found.users");
   }
+
+  const row = Object.values(user);
+
+  sheet.appendRow(row);
+}
+
+function filterUserSensibleData(user) {
+  delete user.google_id;
+  delete user.last_login;
+  delete user.login_method;
+  delete user.nick;
+  delete user.password;
+  delete user.status;
+
+  return user;
 }

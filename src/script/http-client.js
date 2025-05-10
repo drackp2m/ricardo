@@ -1,5 +1,10 @@
 import { url } from './config.js';
 
+/**
+ * @template T
+ * @typedef {import('../definition/google-sheets/google-sheets.response.mjs').GoogleSheetsResponse<T>} GoogleSheetsResponse<T>
+ */
+
 export class HttpClient {
   /** @type {Map<string, Promise<any>>} */
   #ongoingRequests = new Map();
@@ -9,18 +14,19 @@ export class HttpClient {
    * @template T
    * @param {object} request
    * @param {boolean} [retry=true]
-   * @returns {Promise<T>}
+   * @returns {Promise<GoogleSheetsResponse<T>>}
    */
-  async request(request = {}, retry = true) {
+  async request(request, retry = true) {
     const GOOGLE_SCRIPT_URL = url.googleSheets;
     const requestKey = JSON.stringify(request);
 
     const authToken = localStorage.getItem('authToken');
 
     return this.#deduplicateRequest(requestKey, async () => {
-      const body = new URLSearchParams({ authToken, ...request });
-
-      console.log('Fetching:', request);
+      const body = new URLSearchParams({
+        ...(authToken !== null ? { authToken } : {}),
+        ...request,
+      });
 
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -31,7 +37,7 @@ export class HttpClient {
         const data = await response.json();
 
         if (data.success === false && data.error === 'error_expired.jwt' && retry === true) {
-          const refreshResult = await this.refreshToken();
+          const refreshResult = await this.#refreshTokens();
 
           if (refreshResult === false) {
             return data;
@@ -55,9 +61,7 @@ export class HttpClient {
   /**
    * @returns {Promise<boolean>}
    */
-  async refreshToken() {
-    console.log('Token expired, refreshing...');
-
+  async #refreshTokens() {
     if (this.#tokenRefreshPromise) {
       return this.#tokenRefreshPromise;
     }
@@ -69,7 +73,7 @@ export class HttpClient {
         throw new Error('error_not_found.refresh_token');
       }
 
-      const body = new URLSearchParams({ action: 'refreshAuthToken', refreshToken });
+      const body = new URLSearchParams({ action: 'refreshAuthTokens', refreshToken });
 
       try {
         const response = await fetch(url.googleSheets, {
@@ -78,8 +82,6 @@ export class HttpClient {
         });
 
         const { success, data } = await response.json();
-
-        console.log('Token refresh response:', data);
 
         if (success === true) {
           localStorage.setItem('authToken', data.authToken);
@@ -95,8 +97,6 @@ export class HttpClient {
           return false;
         }
       } catch (error) {
-        console.error('Error on refresh token:', error);
-
         return false;
       } finally {
         this.#tokenRefreshPromise = null;
