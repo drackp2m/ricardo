@@ -22,16 +22,14 @@ export class GoogleSheets {
    * @param {string} surname
    * @param {string} email
    * @param {string} password
-   * @param {string} confirmPassword
    */
-  register(name, surname, email, password, confirmPassword) {
+  register(name, surname, email, password) {
     return httpClient.request({
       action: 'register',
       name,
       surname,
       email,
       password,
-      confirmPassword,
     })
   }
 

@@ -1,3 +1,5 @@
+import { Logger } from './logger.js';
+
 export class FormManager {
   /** @type {HTMLFormElement|null} */
   #formElement = null;
@@ -6,6 +8,7 @@ export class FormManager {
   #activeTriggerElement = null;
   #feedbackTimeout = null;
   #defaultFeedbackDuration = 5000;
+  #disabled = false;
 
   /**
    * @param {string} formId
@@ -25,9 +28,28 @@ export class FormManager {
   }
 
   /**
+   * @param {function(Event): Promise<void>|void} handler
+   */
+  onSubmit(handler) {
+    this.#formElement.addEventListener('submit', (event) => {
+      event.preventDefault();
+      
+      handler(event);
+    });
+
+    return this;
+  }
+
+  /**
    * @returns {Object<string, string>}
    */
   getData() {
+    if (this.#disabled) {
+      Logger.warning('Form is disabled. Cannot get data.');
+
+      return {};
+    }
+
     const formData = new FormData(this.#formElement);
 
     /** @type {Object} */
@@ -49,8 +71,7 @@ export class FormManager {
    * @param {string} [triggerElementId]
    */
   disable(triggerElementId) {
-    this.clearFeedback();
-
+    this.#disabled = true;
     const elements =
       /** @type {NodeListOf<HTMLInputElement>} */
       (this.#formElement.querySelectorAll('input, textarea, select, button'));
@@ -68,8 +89,7 @@ export class FormManager {
   }
 
   enable() {
-    this.clearFeedback();
-    
+    this.#disabled = false;
     const elements =
       /** @type {NodeListOf<HTMLInputElement>} */
       (this.#formElement.querySelectorAll('input, textarea, select, button'));
@@ -83,7 +103,7 @@ export class FormManager {
 
   /**
    * @param {string} message
-   * @param {number} [duration=5000]
+   * @param {number} [duration]
    */
   showError(message, duration = this.#defaultFeedbackDuration) {
     this.#showFeedback(message, 'error', duration);
@@ -91,7 +111,7 @@ export class FormManager {
 
   /**
    * @param {string} message
-   * @param {number|null} [duration=null]
+   * @param {number|null} [duration]
    */
   showSuccess(message, duration = this.#defaultFeedbackDuration) {
     this.#showFeedback(message, 'success', duration);

@@ -1,12 +1,50 @@
 import { mainReady } from '../../script.js';
-import { url } from '../../script/config.js';
-
+import { FormManager } from '../../script/form-manager.js';
+import { GoogleSheets } from '../../script/google-sheets/main.js';
+import { Logger } from '../../script/logger.js';
 
 mainReady.then(() => {
-  // const hasAuthToken = localStorage.getItem('authToken');
+  const formManager = new FormManager('register-form', 'feedback');
+  const googleSheets = new GoogleSheets();
 
-  // if (hasAuthToken) {
-  //   window.location.href = `${url.basePathname}page/clock-in`;
-  // }
+  Logger.info('Register page loaded.', 'user', { name: 'John Doe' });
+  Logger.debug('Register page loaded.', 'user', { name: 'John Doe' });
+  Logger.error('Register page loaded.', 'user', { name: 'John Doe' });
+  Logger.warning('Register page loaded.', 'user', { name: 'John Doe' });
+  const pref = Logger.startPerformance('Register');
+  setTimeout(() => {
+    Logger.endPerformance(pref);
+  }, 3000);
+  Logger.request('https://example.com/api', 'GET', { name: 'coco' }, 'user', { name: 'John Doe' });
+  Logger.response('https://example.com/api', 500, { error: 'unknown' }, 'user', {
+    name: 'John Doe',
+  });
+  Logger.table({ user: 'john doe', password: '1234' }, 'Register page loaded.');
 
+  formManager.onSubmit(async () => {
+    formManager.disable();
+    const { name, surname, email, password, repeatPassword } = formManager.getData();
+
+    if (password !== repeatPassword) {
+      formManager.showSuccess('Passwords do not match.');
+      formManager.enable();
+
+      return;
+    }
+
+    return;
+
+    const response = await googleSheets.register(name, surname, email, password);
+
+    if (response.error) {
+      formManager.showError(response.error);
+      formManager.enable();
+
+      return;
+    }
+
+    formManager.showSuccess('Registration successful!');
+    formManager.reset();
+    formManager.enable();
+  });
 });
