@@ -2,6 +2,10 @@ import { logsEnabled } from './config.js';
 
 /**
  * @typedef {{toString: () => string, _styles: string}} StyledText
+ * @typedef {Object} LogGroup
+ * @property {boolean} __isGroup - Marca que identifica al grupo
+ * @property {string} title - Título del grupo
+ * @property {any[]} data - Datos del grupo
  */
 
 export class Logger {
@@ -22,12 +26,14 @@ export class Logger {
     BOLD: 'font-weight: bold;',
     ITALIC: 'font-style: italic;',
     UNDERLINE: 'text-decoration: underline;',
-    RED: 'color: #ff0000;',
-    YELLOW: 'color: #ffc107;',
-    BLUE: 'color: #0066ff;',
-    ORANGE: 'color: #ff6600;',
-    GREEN: 'color: #00cc00;',
-    PURPLE: 'color: #9c27b0;',
+    BLACK: 'color:rgb(0, 0, 0);',
+    WHITE: 'color:rgb(255, 255, 255);',
+    RED: 'color:rgb(234, 82, 82);',
+    YELLOW: 'color:rgb(219, 170, 24);',
+    BLUE: 'color:rgb(34, 151, 241);',
+    ORANGE: 'color:rgb(250, 140, 66);',
+    GREEN: 'color:rgb(40, 190, 40);',
+    PURPLE: 'color:rgb(227, 100, 250);',
     CYAN: 'color: #00bcd4;',
     RESET: 'font-weight: normal; font-style: normal; text-decoration: none; color: inherit;',
   };
@@ -75,7 +81,7 @@ export class Logger {
     if (this.#activeLogTypes.error !== 'off') {
       const emoji = this.#EMOJI.ERROR;
       const type = this.#style('Error:', this.#STYLE.BOLD, this.#STYLE.RED);
-      const text = this.#style(message, this.#STYLE.RESET, this.#STYLE.RED);
+      const text = this.#style(message, this.#STYLE.RED);
       const showTrace = this.#activeLogTypes.error === 'trace';
 
       this.#showLog([emoji, type, text], showTrace, ...data);
@@ -90,7 +96,7 @@ export class Logger {
     if (this.#activeLogTypes.warning !== 'off') {
       const emoji = this.#EMOJI.WARNING;
       const type = this.#style('Warning:', this.#STYLE.BOLD, this.#STYLE.YELLOW);
-      const text = this.#style(message, this.#STYLE.RESET, this.#STYLE.YELLOW);
+      const text = this.#style(message, this.#STYLE.YELLOW);
       const showTrace = this.#activeLogTypes.warning === 'trace';
 
       this.#showLog([emoji, type, text], showTrace, ...data);
@@ -105,7 +111,7 @@ export class Logger {
     if (this.#activeLogTypes.info !== 'off') {
       const emoji = this.#EMOJI.INFO;
       const type = this.#style('Info:', this.#STYLE.BOLD, this.#STYLE.BLUE);
-      const text = this.#style(message, this.#STYLE.RESET, this.#STYLE.BLUE);
+      const text = this.#style(message, this.#STYLE.BLUE);
       const showTrace = this.#activeLogTypes.info === 'trace';
 
       this.#showLog([emoji, type, text], showTrace, ...data);
@@ -120,7 +126,7 @@ export class Logger {
     if (this.#activeLogTypes.debug !== 'off') {
       const emoji = this.#EMOJI.DEBUG;
       const type = this.#style('Debug:', this.#STYLE.BOLD, this.#STYLE.ORANGE);
-      const text = this.#style(message, this.#STYLE.RESET, this.#STYLE.ORANGE);
+      const text = this.#style(message, this.#STYLE.ORANGE);
       const showTrace = this.#activeLogTypes.debug === 'trace';
 
       this.#showLog([emoji, type, text], showTrace);
@@ -134,41 +140,34 @@ export class Logger {
    * @param {...any} extraData
    */
   static request(method, url, requestParams, ...extraData) {
-    // if (this.#activeLogTypes.request !== 'off') {
+    if (this.#activeLogTypes.request !== 'off') {
+      const emoji = this.#EMOJI.REQUEST;
+      const type = this.#style(`Request [${method}]`, this.#STYLE.BOLD, this.#STYLE.GREEN);
+      const text = this.#style(url, this.#STYLE.RESET);
+      const showTrace = this.#activeLogTypes.debug === 'trace';
+      const requestData = this.#group('Request data:', requestParams);
 
-    //   const emoji = this.#EMOJI.REQUEST;
-    //   const type = this.#style(`Request [${method}]`, this.#STYLE.BOLD, this.#STYLE.ORANGE);
-    //   const text = this.#style(url, this.#STYLE.RESET, this.#STYLE.ORANGE);
-    //   const showTrace = this.#activeLogTypes.debug === 'trace';
-
-    //   this.#showLog([emoji, type, text], showTrace, );
-
-
-    //   console.group(`${this.#EMOJI.REQUEST} Request [${method}] ${url}`);
-    //   console.log('Body:', data);
-    //   if (extraData.length > 0) {
-    //     console.log('Additional info:', ...extraData);
-    //   }
-    //   console.groupEnd();
-    // }
+      this.#showLog([emoji, type, text], showTrace, requestData, ...extraData);
+    }
   }
 
   /**
-   * @param {string} url
    * @param {number} status
-   * @param {object} data
+   * @param {string} url
+   * @param {object} response
    * @param {...any} extraData
    */
-  static response(url, status, data, ...extraData) {
-    if (this.#activeLogTypes.response) {
-      const emoji =
-        status >= 200 && status < 300 ? this.#EMOJI.RESPONSE_OK : this.#EMOJI.RESPONSE_KO;
-      console.group(`${this.#EMOJI.RESPONSE} RESPONSE ${emoji}: ${status} ${url}`);
-      console.log('Data:', data);
-      if (extraData.length > 0) {
-        console.log('Additional info:', ...extraData);
-      }
-      console.groupEnd();
+  static response(status, url, response, ...extraData) {
+    if (this.#activeLogTypes.response !== 'off') {
+      const statusSuccess = status >= 200 && status < 300;
+      const emoji = statusSuccess ? this.#EMOJI.RESPONSE_OK : this.#EMOJI.RESPONSE_KO;
+      const responseColor = statusSuccess ? this.#STYLE.GREEN : this.#STYLE.RED;
+      const responseWithCode = this.#style(`Response [${status}]`, this.#STYLE.BOLD, responseColor);
+      const urlWithReset = this.#style(url, this.#STYLE.RESET);
+      const showTrace = this.#activeLogTypes.debug === 'trace';
+      const responseData = this.#group('Response data:', response);
+
+      this.#showLog([emoji, responseWithCode, urlWithReset], showTrace, responseData, ...extraData);
     }
   }
 
@@ -177,7 +176,7 @@ export class Logger {
    * @returns {string|null}
    */
   static startPerformance(label = '') {
-    if (!this.#activeLogTypes.performance) {
+    if (this.#activeLogTypes.performance === 'off') {
       return null;
     }
 
@@ -189,7 +188,12 @@ export class Logger {
       startTime: performance.now(),
     });
 
-    console.log(`${this.#EMOJI.PERFORMANCE} PERFORMANCE START [${shortId}]: ${label}`);
+    const emoji = this.#EMOJI.PERFORMANCE;
+    const type = this.#style('Performance start:', this.#STYLE.BOLD, this.#STYLE.PURPLE);
+    const text = this.#style(`[${shortId}] ${label}`, this.#STYLE.PURPLE);
+    const showTrace = this.#activeLogTypes.debug === 'trace';
+
+    this.#showLog([emoji, type, text], showTrace);
 
     return id;
   }
@@ -199,30 +203,37 @@ export class Logger {
    * @returns {number|null}
    */
   static endPerformance(id) {
-    if (!this.#activeLogTypes.performance || !id || !this.#performances.has(id)) {
+    if (this.#activeLogTypes.performance === 'off' || this.#performances.has(id) === false) {
       return null;
     }
 
     const { label, startTime } = this.#performances.get(id);
     const endTime = performance.now();
     const duration = endTime - startTime;
-
-    console.log(
-      `${this.#EMOJI.PERFORMANCE} PERFORMANCE END [${id}]: ${label} took ${duration.toFixed(2)}ms`
-    );
-
+    const shortId = id.split('-')[0];
     this.#performances.delete(id);
+
+    const emoji = this.#EMOJI.PERFORMANCE;
+    const type = this.#style('Performance end:', this.#STYLE.BOLD, this.#STYLE.PURPLE);
+    const text = this.#style(`[${shortId}] ${label} took`, this.#STYLE.PURPLE);
+    const time = this.#style(`${duration.toFixed(2)}ms`, this.#STYLE.BOLD, this.#STYLE.PURPLE);
+    const showTrace = this.#activeLogTypes.debug === 'trace';
+
+    this.#showLog([emoji, type, text, time], showTrace);
 
     return duration;
   }
 
   /**
+   * @param {string} title
    * @param {object} data
-   * @param {string} [title]
    */
-  static table(data, title = 'Table Data') {
-    if (this.#activeLogTypes.table) {
-      console.group(`${this.#EMOJI.TABLE} ${title}`);
+  static table(title, data) {
+    if (this.#activeLogTypes.table !== 'off') {
+      const emoji = this.#EMOJI.TABLE;
+      const type = this.#style(title, this.#STYLE.BOLD, this.#STYLE.CYAN);
+
+      console.group(...this.#getStyledText([emoji, type]));
       console.table(data);
       console.groupEnd();
     }
@@ -248,36 +259,78 @@ export class Logger {
   }
 
   /**
+   * @param {string} title
+   * @param {...any} data
+   * @returns {LogGroup}
+   */
+  static #group(title, ...data) {
+    return {
+      __isGroup: true,
+      title,
+      data,
+    };
+  }
+
+  /**
    * @param {(string|StyledText)[]} message
    * @param {boolean} [showTrace]
-   * @param {...{title?: string, value: any[]}} [data]
+   * @param {...any} [data]
    */
   static #showLog(message, showTrace = false, ...data) {
-    let formattedMessage = [];
-    let messageStyles = [];
+    console.log(...this.#getStyledText(message));
 
-    message.map((message) => {
-      if (typeof message === 'object') {
-        formattedMessage.push(message.toString());
-        messageStyles.push(message._styles);
+    let dataIndex = 0;
+    while (dataIndex < data.length) {
+      const item = data[dataIndex];
+
+      if (item && typeof item === 'object' && item.title) {
+        console.group(item.title);
+        console.log(...item.data);
+        console.groupEnd();
+
+        dataIndex++;
       } else {
-        formattedMessage.push(message);
+        break;
       }
-    });
-
-    if (data.length === 0) {
-      console.log(formattedMessage.join(' '), ...messageStyles);
     }
 
-    if (data.length > 0) {
-      console.group(formattedMessage.join(' '), ...messageStyles);
-      console.log('Additional info:', ...data);
-      console.groupEnd();
+    if (dataIndex < data.length) {
+      const remainingData = data.slice(dataIndex);
+
+      if (remainingData.length > 0) {
+        console.group('Additional info:');
+        console.log(...remainingData);
+        console.groupEnd();
+      }
     }
 
     if (showTrace === true) {
-      console.trace('Stack trace:');
+      console.group('Stack trace:');
+      console.trace();
+      console.groupEnd();
     }
+  }
+
+  /**
+   * @param {(string|StyledText)[]} styledText
+   * @returns {string[]}
+   */
+  static #getStyledText(styledText) {
+    let texts = [];
+    let styles = [];
+
+    styledText.forEach((part) => {
+      if (typeof part === 'object') {
+        texts.push(part.toString());
+        styles.push(part._styles);
+      } else {
+        texts.push(part);
+      }
+    });
+
+    const text = texts.join(' ');
+
+    return [text, ...styles];
   }
 
   static #generateUuid() {

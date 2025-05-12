@@ -15,11 +15,11 @@ mainReady.then(() => {
   setTimeout(() => {
     Logger.endPerformance(pref);
   }, 3000);
-  Logger.request('https://example.com/api', 'GET', { name: 'coco' }, 'user', { name: 'John Doe' });
-  Logger.response('https://example.com/api', 500, { error: 'unknown' }, 'user', {
+  Logger.request('GET', 'https://example.com/api', { name: 'coco' }, 'user', { name: 'John Doe' });
+  Logger.response(201, 'https://example.com/api', { error: 'unknown' }, 'user', {
     name: 'John Doe',
   });
-  Logger.table({ user: 'john doe', password: '1234' }, 'Register page loaded.');
+  Logger.table('Register page loaded.', { user: 'john doe', password: '1234' });
 
   formManager.onSubmit(async () => {
     formManager.disable();
