@@ -62,6 +62,26 @@ export class FormManager {
     return data;
   }
 
+  /**
+   * 
+   * @param {Object<string, string>} data 
+   * @returns {void}
+   */
+  setData(data) {
+    for (const [key, value] of Object.entries(data)) {
+      const element = this.#formElement.elements[key];
+
+      if (element) {
+        element.value = value;
+      } else {
+        Logger.warning(`Element with name "${key}" not found in form.`);
+      }
+    }
+  }
+
+  /**
+   * @returns {void}
+   */
   reset() {
     this.#formElement.reset();
     this.clearFeedback();

@@ -147,3 +147,17 @@ export function isPathInRouteList(targetPath, routePatterns) {
     return normalizedCurrentPath === baseRoute || normalizedCurrentPath.startsWith(`${baseRoute}/`);
   });
 }
+/**
+ * @param {string} str
+ * @param {string} char
+ * @returns {string[]}
+ */
+export function splitByLastOccurrence(str, char) {
+  const lastIndex = str.lastIndexOf(char);
+
+  if (lastIndex === -1) {
+    return [str, ''];
+  }
+
+  return [str.substring(0, lastIndex), str.substring(lastIndex + 1)];
+}

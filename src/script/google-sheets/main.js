@@ -9,6 +9,7 @@ import { getWorkHistory } from './get-work-history.js';
 
 /**
  * @typedef {import('../../definition/google-sheets/login.response.mjs').LoginResponse} LoginResponse
+ * @typedef {import('../../definition/google-sheets/register-password.response.mjs').RegisterPasswordResponse} RegisterPasswordResponse
  */
 
 export class GoogleSheets {
@@ -21,16 +22,32 @@ export class GoogleSheets {
    * @param {string} name
    * @param {string} surname
    * @param {string} email
-   * @param {string} password
+   * @param {string} referer
    */
-  register(name, surname, email, password) {
+  register(name, surname, email, referer) {
     return httpClient.request({
       action: 'register',
       name,
       surname,
       email,
+      referer,
+    });
+  }
+
+  /**
+   *
+   * @param {string} email
+   * @param {string} code
+   * @param {string} password
+   * @returns {Promise<GoogleSheetsResponse<RegisterPasswordResponse>>}
+   */
+  registerPassword(email, code, password) {
+    return httpClient.request({
+      action: 'registerPassword',
+      email,
+      code,
       password,
-    })
+    });
   }
 
   /**

@@ -129,7 +129,7 @@ export class Logger {
       const text = this.#style(message, this.#STYLE.ORANGE);
       const showTrace = this.#activeLogTypes.debug === 'trace';
 
-      this.#showLog([emoji, type, text], showTrace);
+      this.#showLog([emoji, type, text], showTrace, ...data);
     }
   }
 

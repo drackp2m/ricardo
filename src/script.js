@@ -142,7 +142,7 @@ function redirectTo(path) {
  * @returns {Promise<void>}
  */
 function checkProtectedRoutes() {
-  const publicRoutes = ['/page/login', '/page/register', '/page/reset-password'];
+  const publicRoutes = ['/page/login', '/page/register*', '/page/reset-password'];
   const authToken = localStorage.getItem('authToken');
   const isAuthTokenPresent = authToken !== null;
   const isOnBasePath = location.pathname === url.basePathname;

@@ -5,38 +5,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;," />
-    <link rel="stylesheet" href="page/register/style.css" />
-    <title>Register - Ricardo Gelats</title>
+    <link rel="stylesheet" href="page/register/password/style.css" />
+    <title>Register password - Ricardo Gelats</title>
   </head>
 
   <body class="flex-col justify-center align-center p-4 pb-16">
     <form id="register-form" class="card">
       <div class="header px-4 py-2 text-center">
-        <h3><a href="">Register</a></h3>
+        <h3><a href="">Register password</a></h3>
       </div>
 
       <div class="body flex-col gap-2 px-4 pt-3 pb-4">
-        <div class="flex-row justify-between gap-4">
-          <div class="form-group flex-col gap-1">
-            <label for="name-input">Name:</label>
-            <input type="text" id="name-input" name="name" required placeholder="John" />
-          </div>
-
-          <div class="form-group flex-col gap-1">
-            <label for="surname-input">Surname:</label>
-            <input type="text" id="surname-input" name="surname" required placeholder="Doe" />
-          </div>
-        </div>
-
         <div class="form-group flex-col gap-1">
           <label for="email-input">Email:</label>
           <input
             type="email"
             id="email-input"
             name="email"
-            required
-            placeholder="johndoe@domain.com"
+            disabled
           />
+        </div>
+
+        <div class="flex-row justify-between gap-4">
+          <div class="form-group flex-col gap-1">
+            <label for="password-input">Password:</label>
+            <input
+              type="password"
+              id="password-input"
+              name="password"
+              required
+              placeholder="••••••••••••••"
+            />
+          </div>
+
+          <div class="form-group flex-col gap-1">
+            <label for="repeat-password-input">Repeat password:</label>
+            <input
+              type="password"
+              id="repeat-password-input"
+              name="repeatPassword"
+              required
+              placeholder="••••••••••••••"
+            />
+          </div>
         </div>
 
         <p id="feedback" class="font-sm text-right weight-lg">&nbsp;</p>
@@ -50,6 +61,6 @@
       </div>
     </form>
 
-    <script type="module" src="page/register/script.js"></script>
+    <script type="module" src="page/register/password/script.js"></script>
   </body>
 </html>

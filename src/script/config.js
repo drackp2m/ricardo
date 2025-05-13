@@ -1,5 +1,5 @@
-const googleSheetsId = 'AKfycbz2cY1rDUMCZMzVlTlEnAPBkB9-uaUsafYAnq8m5hp5UmsRJzlgvMu8RcoRWhN9dze5';
-
+const googleSheetsId = 'AKfycbz1g0fOrtkVYHn2XDK6AUQTqBYfnpZewEHNphiYzg3fnNXmaF4iaMjOYYFCJ-h-adwm';
+const googleSheetsDevId = 'AKfycbx0OqBrHCykrvLJtJw0McbixH7swSPOoigPhUUKq8E';
 /**
  * @typedef {'off'|'on'|'trace'} LogLevel
  * @typedef {Record<string, LogLevel>} LogSettings
@@ -8,7 +8,7 @@ const googleSheetsId = 'AKfycbz2cY1rDUMCZMzVlTlEnAPBkB9-uaUsafYAnq8m5hp5UmsRJzlg
 export const url = {
   basePathname: '/',
   googleSheets: `https://script.google.com/macros/s/${googleSheetsId}/exec`,
-  // googleSheets: `https://script.google.com/macros/s/${googleSheetsId}/dev`
+  // googleSheets: `https://script.google.com/macros/s/${googleSheetsDevId}/dev`
 };
 
 /**
