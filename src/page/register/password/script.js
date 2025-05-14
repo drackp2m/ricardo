@@ -10,9 +10,16 @@ mainReady.then(() => {
 
   const urlSearchParams = new URLSearchParams(window.location.search);
 
-  const emailAndCode = atob(decodeURIComponent(urlSearchParams.get('code')));
+  const emailAndCode = decodeURIComponent(urlSearchParams.get('code'));
 
-  const [email, code] = splitByLastOccurrence(emailAndCode, '.');
+  if (emailAndCode === 'null') {
+    formManager.showError('Invalid link. Form disabled.', 0);
+    formManager.disable();
+
+    return;
+  }
+
+  const [email, code] = splitByLastOccurrence(atob(emailAndCode), '.');
 
   formManager.setData({ email });
 
