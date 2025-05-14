@@ -1,35 +1,33 @@
 import { mainReady } from '../../../script.js';
 import { FormManager } from '../../../script/form-manager.js';
-import { GoogleSheets } from '../../../script/google-sheets/main.js';
-import { Logger } from '../../../script/logger.js';
+import { googleSheets } from '../../../script/google-sheets/main.js';
 import { splitByLastOccurrence } from '../../../script/utils.js';
 
 mainReady.then(() => {
-  const formManager = new FormManager('register-form', 'feedback');
-  const googleSheets = new GoogleSheets();
+  const form = new FormManager('register-form', 'feedback');
 
   const urlSearchParams = new URLSearchParams(window.location.search);
 
   const emailAndCode = decodeURIComponent(urlSearchParams.get('code'));
 
   if (emailAndCode === 'null') {
-    formManager.setError('Invalid link. Form disabled.', 0);
-    formManager.disable();
+    form.setError('Invalid link. Form disabled.', 0);
+    form.disable();
 
     return;
   }
 
   const [email, code] = splitByLastOccurrence(atob(emailAndCode), '.');
 
-  formManager.setData({ email });
+  form.setData({ email });
 
-  formManager.onSubmit(async () => {
-    const { password, repeatPassword } = formManager.getData();
-    formManager.disable('login-form-submit');
+  form.onSubmit(async () => {
+    const { password, repeatPassword } = form.getData();
+    form.disable('login-form-submit');
 
     if (password !== repeatPassword) {
-      formManager.setError('Passwords do not match.');
-      formManager.enable();
+      form.setError('Passwords do not match.');
+      form.enable();
 
       return;
     }
@@ -37,13 +35,13 @@ mainReady.then(() => {
     const response = await googleSheets.registerPassword(email, code, password);
 
     if (response.error) {
-      formManager.setError(response.error);
-      formManager.enable();
+      form.setError(response.error);
+      form.enable();
 
       return;
     }
 
-    formManager.setSuccess('Registration successful!');
+    form.setSuccess('Registration successful!');
 
     const { authToken, refreshToken } = response.data;
 

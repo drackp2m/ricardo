@@ -8,14 +8,12 @@ import { getWorkHistory } from './get-work-history.js';
  */
 
 /**
- * @typedef {import('../../definition/google-sheets/login.response.mjs').LoginResponse} LoginResponse
- * @typedef {import('../../definition/google-sheets/register-password.response.mjs').RegisterPasswordResponse} RegisterPasswordResponse
+ * @typedef {import('../../definition/google-sheets/auth-tokens-response.mjs').AuthTokensResponse} AuthTokensResponse
  */
 
-export class GoogleSheets {
+class GoogleSheets {
   /** @type {Map<string, Promise<any>>} */
-  ongoingRequests = new Map();
-  userData = null;
+  #ongoingRequests = new Map();
 
   /**
    *
@@ -39,7 +37,7 @@ export class GoogleSheets {
    * @param {string} email
    * @param {string} code
    * @param {string} password
-   * @returns {Promise<GoogleSheetsResponse<RegisterPasswordResponse>>}
+   * @returns {Promise<GoogleSheetsResponse<AuthTokensResponse>>}
    */
   registerPassword(email, code, password) {
     return httpClient.request({
@@ -51,11 +49,9 @@ export class GoogleSheets {
   }
 
   /**
-   * @typedef {import('../../definition/google-sheets/login-with-google.response.mjs').LoginWithGoogleResponse} LoginWithGoogleResponse
-   *
    * @param {string} clientId
    * @param {string} credential
-   * @returns {Promise<GoogleSheetsResponse<LoginWithGoogleResponse>>}
+   * @returns {Promise<GoogleSheetsResponse<AuthTokensResponse>>}
    */
   loginWithGoogle(clientId, credential) {
     return httpClient.request({
@@ -66,22 +62,12 @@ export class GoogleSheets {
   }
 
   /**
-   * @param {string} userUuid
-   * @returns {Promise<GoogleSheetsResponse<LoginResponse>>}
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<GoogleSheetsResponse<AuthTokensResponse>>}
    */
-  async login(userUuid) {
-    const response = await httpClient.request({
-      action: 'login',
-      userUuid,
-    });
-
-    if (response.success === false) {
-      this.userData = null;
-    } else {
-      this.userData = response.data;
-    }
-
-    return response;
+  async login(email, password) {
+    return httpClient.request({ action: 'login', email, password });
   }
 
   /**
@@ -122,18 +108,20 @@ export class GoogleSheets {
    * @returns {Promise<T>}
    */
   #deduplicateRequest(requestKey, promiseFn) {
-    if (this.ongoingRequests.has(requestKey) === true) {
-      return this.ongoingRequests.get(requestKey);
+    if (this.#ongoingRequests.has(requestKey) === true) {
+      return this.#ongoingRequests.get(requestKey);
     }
 
     const requestPromise = promiseFn();
 
-    this.ongoingRequests.set(requestKey, requestPromise);
+    this.#ongoingRequests.set(requestKey, requestPromise);
 
     requestPromise.finally(() => {
-      this.ongoingRequests.delete(requestKey);
+      this.#ongoingRequests.delete(requestKey);
     });
 
     return requestPromise;
   }
 }
+
+export const googleSheets = new GoogleSheets();

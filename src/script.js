@@ -1,4 +1,4 @@
-import { GoogleSheets } from './script/google-sheets/main.js';
+import { googleSheets } from './script/google-sheets/main.js';
 import { url } from './script/config.js';
 import { getYearAndWeekByDate, isPathInRouteList } from './script/utils.js';
 
@@ -76,7 +76,6 @@ async function handleInitialAuthVerification() {
   }
 
   updateUIStatus('checking-remote');
-  const googleSheets = new GoogleSheets();
   const userData = await googleSheets.getUserData();
 
   if (userData.success === false) {

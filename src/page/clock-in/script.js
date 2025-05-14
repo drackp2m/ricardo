@@ -1,12 +1,11 @@
 import { mainReady } from '../../script.js';
 import { FormManager } from '../../script/form-manager.js';
-import { GoogleSheets } from '../../script/google-sheets/main.js';
+import { googleSheets } from '../../script/google-sheets/main.js';
 import { formatDateToISO8601, getYearAndWeekByDate } from '../../script/utils.js';
 import { WorkHistoryCache } from '../../script/work-history-cache.js';
 
 mainReady.then(() => {
   const formManager = new FormManager('clock-in-form', 'feedback');
-  const googleSheets = new GoogleSheets();
 
   const now = new Date();
   const { year: currentYear, week: currentWeek } = getYearAndWeekByDate(now);

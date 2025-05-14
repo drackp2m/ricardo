@@ -1,7 +1,8 @@
 import { mainReady } from '../../script.js';
 import { url } from '../../script/config.js';
 import { FormManager } from '../../script/form-manager.js';
-import { GoogleSheets } from '../../script/google-sheets/main.js';
+import { googleSheets } from '../../script/google-sheets/main.js';
+import { sessionManager } from '../../script/session-manager.js';
 
 /**
  * @typedef GoogleLoginResponse
@@ -11,8 +12,33 @@ import { GoogleSheets } from '../../script/google-sheets/main.js';
  * @property {string} select_by
  */
 
+mainReady.then(() => {
+  const form = new FormManager('form', 'feedback');
+
+  form.onSubmit(() => {
+    const { email, password } = form.getData();
+    form.disable('login-form-submit');
+
+    googleSheets.login(email, password).then((response) => {
+      if (response.success === false) {
+        form.setError(response.error || 'Login failed');
+        form.enable();
+
+        return;
+      }
+
+      const { authToken, refreshToken } = response.data;
+
+      sessionManager.setSession(authToken, refreshToken);
+
+      window.location.href = `${url.basePathname}page/clock-in`;
+
+    });
+  });
+});
+
 /**
- * @param {GoogleLoginResponse} response 
+ * @param {GoogleLoginResponse} response
  * @returns {void}
  */
 //@ts-ignore
@@ -20,65 +46,22 @@ window.handleGoogleLogin = function (response) {
   const clientId = response.clientId;
   const credential = response.credential;
 
-  const googleSheets = new GoogleSheets();
   const formManager = new FormManager('login-form', 'feedback');
 
   formManager.disable('login-form-submit');
 
   googleSheets.loginWithGoogle(clientId, credential).then((response) => {
-    if (response.success) {
-      localStorage.setItem('authToken', response.data.authToken);
-      localStorage.setItem('refreshToken', response.data.refreshToken);
-
-      window.location.href = `${url.basePathname}page/clock-in`;
-    } else {
+    if (response.success === false) {
       formManager.setError(response.error || 'Google login failed');
       formManager.enable();
-    }
-  });
-};
 
-mainReady.then(() => {
-  const hasAuthToken = localStorage.getItem('authToken');
-
-  if (hasAuthToken) {
-    window.location.href = `${url.basePathname}page/clock-in`;
-  }
-
-  const formManager = new FormManager('login-form', 'feedback');
-  const googleSheets = new GoogleSheets();
-
-  const loginFormElement =
-    /** @type {HTMLFormElement|null} */
-    (document.getElementById('login-form'));
-  const userUuidInputElement =
-    /** @type {HTMLInputElement|null} */
-    (document.getElementById('user-uuid-input'));
-
-  loginFormElement.onsubmit = function (e) {
-    e.preventDefault();
-
-    const { userUuid } = formManager.getData();
-
-    formManager.disable('login-form-submit');
-
-    if (userUuid === '') {
-      formManager.setError('User identifier is required');
-      formManager.enable();
       return;
     }
 
-    googleSheets.login(userUuid).then((response) => {
-      if (response.success) {
-        localStorage.setItem('userUuid', userUuid);
-        localStorage.setItem('userName', response.data.name);
-        localStorage.setItem('userSurname', response.data.surname);
+    const { authToken, refreshToken } = response.data;
 
-        window.location.href = `${url.basePathname}page/clock-in`;
-      } else {
-        formManager.setError(response.error || 'User not found');
-        formManager.enable();
-      }
-    });
-  };
-});
+    sessionManager.setSession(authToken, refreshToken)
+
+    window.location.href = `${url.basePathname}page/clock-in`;
+  });
+};

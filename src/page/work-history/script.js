@@ -3,7 +3,7 @@ import { ChartManager } from './script/chart-manager.js';
 
 import { mainReady } from '../../script.js';
 import { getWeeksNumberByYear, getYearAndWeekByDate } from '../../script/utils.js';
-import { GoogleSheets } from '../../script/google-sheets/main.js';
+import { googleSheets } from '../../script/google-sheets/main.js';
 import { FormManager } from '../../script/form-manager.js';
 
 mainReady.then(async () => {
@@ -19,8 +19,6 @@ mainReady.then(async () => {
   const ctx = /** @type {HTMLCanvasElement} */ (document.getElementById('chart')).getContext('2d');
 
   let { year: currentYear, week: currentWeek } = getYearAndWeekByDate();
-
-  const googleSheets = new GoogleSheets();
 
   const entries = await googleSheets.getWorkHistory(currentYear, currentWeek);
 
