@@ -44,7 +44,7 @@ mainReady.then(() => {
     googleSheets.registerEntry(date, entryTime, exitTime).then((response) => {
       if (response.success === false) {
         formManager.enable();
-        formManager.showError(response.error || 'Unknown error');
+        formManager.setError(response.error || 'Unknown error');
       } else {
         const { year, week } = getYearAndWeekByDate(new Date(date));
         WorkHistoryCache.delete(currentYear, currentWeek);
@@ -55,7 +55,7 @@ mainReady.then(() => {
 
         formManager.reset();
         formManager.enable();
-        formManager.showSuccess('Entry registered successfully');
+        formManager.setSuccess('Entry registered successfully');
       }
     });
   };

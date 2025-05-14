@@ -125,7 +125,7 @@ export class FormManager {
    * @param {string} message
    * @param {number} [duration]
    */
-  showError(message, duration = this.#defaultFeedbackDuration) {
+  setError(message, duration = this.#defaultFeedbackDuration) {
     this.#showFeedback(message, 'error', duration);
   }
 
@@ -133,7 +133,7 @@ export class FormManager {
    * @param {string} message
    * @param {number|null} [duration]
    */
-  showSuccess(message, duration = this.#defaultFeedbackDuration) {
+  setSuccess(message, duration = this.#defaultFeedbackDuration) {
     this.#showFeedback(message, 'success', duration);
   }
 

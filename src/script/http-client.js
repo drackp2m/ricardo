@@ -5,7 +5,7 @@ import { url } from './config.js';
  * @typedef {import('../definition/google-sheets/google-sheets.response.mjs').GoogleSheetsResponse<T>} GoogleSheetsResponse<T>
  */
 
-export class HttpClient {
+class HttpClient {
   /** @type {Map<string, Promise<any>>} */
   #ongoingRequests = new Map();
   #tokenRefreshPromise = null;
@@ -46,6 +46,10 @@ export class HttpClient {
           this.#ongoingRequests.delete(requestKey);
 
           return this.request(request, false);
+        }
+
+        if (data.success === false && data.error === 'error_required_parameter.authToken') {
+          window.location.href = '/page/login?reason=session_expired';
         }
 
         return data;

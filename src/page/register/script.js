@@ -14,13 +14,13 @@ mainReady.then(() => {
     const response = await googleSheets.register(name, surname, email, referer);
 
     if (response.error) {
-      formManager.showError(response.error);
+      formManager.setError(response.error);
       formManager.enable();
 
       return;
     }
 
-    formManager.showSuccess('Check your email for the complete registration link.');
+    formManager.setSuccess('Check your email for the complete registration link.');
     formManager.reset();
     formManager.enable();
   });

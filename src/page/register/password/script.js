@@ -13,7 +13,7 @@ mainReady.then(() => {
   const emailAndCode = decodeURIComponent(urlSearchParams.get('code'));
 
   if (emailAndCode === 'null') {
-    formManager.showError('Invalid link. Form disabled.', 0);
+    formManager.setError('Invalid link. Form disabled.', 0);
     formManager.disable();
 
     return;
@@ -28,7 +28,7 @@ mainReady.then(() => {
     formManager.disable('login-form-submit');
 
     if (password !== repeatPassword) {
-      formManager.showError('Passwords do not match.');
+      formManager.setError('Passwords do not match.');
       formManager.enable();
 
       return;
@@ -37,13 +37,13 @@ mainReady.then(() => {
     const response = await googleSheets.registerPassword(email, code, password);
 
     if (response.error) {
-      formManager.showError(response.error);
+      formManager.setError(response.error);
       formManager.enable();
 
       return;
     }
 
-    formManager.showSuccess('Registration successful!');
+    formManager.setSuccess('Registration successful!');
 
     const { authToken, refreshToken } = response.data;
 

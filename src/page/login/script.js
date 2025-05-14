@@ -32,7 +32,7 @@ window.handleGoogleLogin = function (response) {
 
       window.location.href = `${url.basePathname}page/clock-in`;
     } else {
-      formManager.showError(response.error || 'Google login failed');
+      formManager.setError(response.error || 'Google login failed');
       formManager.enable();
     }
   });
@@ -63,7 +63,7 @@ mainReady.then(() => {
     formManager.disable('login-form-submit');
 
     if (userUuid === '') {
-      formManager.showError('User identifier is required');
+      formManager.setError('User identifier is required');
       formManager.enable();
       return;
     }
@@ -76,7 +76,7 @@ mainReady.then(() => {
 
         window.location.href = `${url.basePathname}page/clock-in`;
       } else {
-        formManager.showError(response.error || 'User not found');
+        formManager.setError(response.error || 'User not found');
         formManager.enable();
       }
     });
