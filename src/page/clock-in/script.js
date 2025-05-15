@@ -2,7 +2,7 @@ import { mainReady } from '../../script.js';
 import { FormManager } from '../../script/form-manager.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
 import { formatDateToISO8601, getYearAndWeekByDate } from '../../script/utils.js';
-import { WorkHistoryCache } from '../../script/work-history-cache.js';
+import { workHistoryCache } from '../../script/work-history-cache.js';
 
 mainReady.then(() => {
   const formManager = new FormManager('clock-in-form', 'feedback');
@@ -46,7 +46,7 @@ mainReady.then(() => {
         formManager.setError(response.error || 'Unknown error');
       } else {
         const { year, week } = getYearAndWeekByDate(new Date(date));
-        WorkHistoryCache.delete(currentYear, currentWeek);
+        workHistoryCache.delete(currentYear, currentWeek);
         // ToDo => try to make googleSheets singleton and use it here
         // googleSheets.getWorkHistory(year, week).then(() => {
         //   console.log('Work history updated');

@@ -1,7 +1,7 @@
 import { url } from '../config.js';
 import { httpClient } from '../http-client.js';
 import { getWeekRangeFromYearAndWeek } from '../utils.js';
-import { WorkHistoryCache } from '../work-history-cache.js';
+import { workHistoryCache } from '../work-history-cache.js';
 
 /**
  * @template T
@@ -18,7 +18,7 @@ import { WorkHistoryCache } from '../work-history-cache.js';
  */
 export async function getWorkHistory(year, week, useCache) {
   if (useCache === true) {
-    const cached = WorkHistoryCache.get(year, week);
+    const cached = workHistoryCache.get(year, week);
 
     if (cached !== null) {
       return { success: true, data: cached.data };
@@ -28,7 +28,7 @@ export async function getWorkHistory(year, week, useCache) {
   const { from, to } = getWeekRangeFromYearAndWeek(year, week);
 
   return httpClient.request({ action: 'getEntriesBetweenDates', from, to }).then((response) => {
-    WorkHistoryCache.set(year, week, response.data);
+    workHistoryCache.set(year, week, response.data);
 
     return response;
   });

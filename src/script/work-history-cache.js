@@ -1,23 +1,23 @@
 /**
- * @typedef {import('../script/google-sheets/main.js').GetEntriesBetweenDatesResponse} PageData
+ * @typedef {import('../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} PageData
  * @typedef {{ cachedAt: Date, data: PageData[] }} WorkHistoryCacheData
  */
 
-export class WorkHistoryCache {
-  static CACHE_KEY = 'workHistoryCache';
+class WorkHistoryCache {
+  #CACHE_KEY = 'workHistoryCache';
 
   /**
    * @param {number} year
    * @param {number} week
    * @param {PageData[]} data
    */
-  static set(year, week, data) {
-    const all = WorkHistoryCache.getAll();
+  set(year, week, data) {
+    const all = this.getAll();
     const key = `${year}-${week}`;
 
     all[key] = { cachedAt: new Date(), data };
 
-    localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
+    localStorage.setItem(this.#CACHE_KEY, JSON.stringify(all));
   }
 
   /**
@@ -25,9 +25,8 @@ export class WorkHistoryCache {
    * @param {number} week
    * @returns {WorkHistoryCacheData|null}
    */
-  static get(year, week) {
-    const all = WorkHistoryCache.getAll();
-
+  get(year, week) {
+    const all = this.getAll();
     const key = `${year}-${week}`;
 
     return all[key] || null;
@@ -36,8 +35,8 @@ export class WorkHistoryCache {
   /**
    * @returns {Object<string, WorkHistoryCacheData>}
    */
-  static getAll() {
-    const raw = localStorage.getItem(WorkHistoryCache.CACHE_KEY);
+  getAll() {
+    const raw = localStorage.getItem(this.#CACHE_KEY);
 
     if (raw === null) {
       return {};
@@ -55,18 +54,23 @@ export class WorkHistoryCache {
    * @param {number} week
    * @returns {void}
    */
-  static delete(year, week) {
-    const all = WorkHistoryCache.getAll();
+  delete(year, week) {
+    const all = this.getAll();
     const key = `${year}-${week}`;
 
     if (all[key]) {
       delete all[key];
 
-      localStorage.setItem(WorkHistoryCache.CACHE_KEY, JSON.stringify(all));
+      localStorage.setItem(this.#CACHE_KEY, JSON.stringify(all));
     }
   }
 
-  static clear() {
-    localStorage.removeItem(WorkHistoryCache.CACHE_KEY);
+  /**
+   * @returns {void}
+   */
+  clear() {
+    localStorage.removeItem(this.#CACHE_KEY);
   }
 }
+
+export const workHistoryCache = new WorkHistoryCache();

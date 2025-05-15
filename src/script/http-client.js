@@ -1,4 +1,5 @@
 import { url } from './config.js';
+import { sessionManager } from './session-manager.js';
 
 /**
  * @template T
@@ -20,7 +21,7 @@ class HttpClient {
     const GOOGLE_SCRIPT_URL = url.googleSheets;
     const requestKey = JSON.stringify(request);
 
-    const authToken = localStorage.getItem('authToken');
+    const authToken = sessionManager.getAuthToken();
 
     return this.#deduplicateRequest(requestKey, async () => {
       const body = new URLSearchParams({

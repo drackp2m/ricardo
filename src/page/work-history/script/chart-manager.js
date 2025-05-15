@@ -2,13 +2,17 @@ import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
 import { formatDateToString } from '../../../script/utils.js';
 
+/**
+ * @typedef {import('../../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse
+ */
+
 // @ts-ignore
 const Chart = window.Chart;
 
 export class ChartManager {
   /**
    * @param {CanvasRenderingContext2D} ctx
-   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
+   * @param {GetEntriesBetweenDatesResponse[]} entries
    * @param {'range'|'total'} mode
    */
   constructor(ctx, entries, mode = 'range') {
@@ -33,7 +37,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
+   * @param {GetEntriesBetweenDatesResponse[]} entries
    */
   updateData(entries) {
     this.entries = entries;
@@ -45,7 +49,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
+   * @param {GetEntriesBetweenDatesResponse[]} entries
    */
   #computeLabels(entries) {
     return entries.map((entry) =>
@@ -54,7 +58,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse[]} entries
+   * @param {GetEntriesBetweenDatesResponse[]} entries
    */
   #computeDataModes(entries) {
     return {
@@ -64,7 +68,7 @@ export class ChartManager {
   }
 
   /**
-   * @param {import('../../../script/google-sheets/main').GetEntriesBetweenDatesResponse} entry
+   * @param {GetEntriesBetweenDatesResponse} entry
    * @param {'range'|'total'} mode
    * @returns {number[]|number|null[]|null}
    */
