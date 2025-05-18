@@ -1,0 +1,22 @@
+:root {
+	--layout-padding: var(--space-4);
+
+  @media screen and (width >= 420px) {
+	  --layout-padding: var(--space-2);
+  }
+}
+
+.content-fixed {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 var(--layout-padding);
+
+  @media screen and (width >= 420px) {
+    width: 420px;
+  }
+}
+
+.content-fluid {
+	width: 100%;
+	padding: 0 var(--layout-padding);
+}

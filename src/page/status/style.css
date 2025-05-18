@@ -1,1 +1,7 @@
 @import url('../../../css/style.css');
+
+nav {
+  background: var(--color-glass-sm);
+  width: 100%;
+  backdrop-filter: blur(2px);
+}
