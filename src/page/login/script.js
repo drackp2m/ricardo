@@ -31,8 +31,7 @@ main.onReady(() => {
 
       sessionManager.setSession(authToken, refreshToken);
 
-      window.location.href = `${url.basePathname}page/clock-in`;
-
+      window.location.href = url.basePathname;
     });
   });
 });
@@ -60,7 +59,7 @@ window.handleGoogleLogin = function (response) {
 
     const { authToken, refreshToken } = response.data;
 
-    sessionManager.setSession(authToken, refreshToken)
+    sessionManager.setSession(authToken, refreshToken);
 
     window.location.href = `${url.basePathname}page/clock-in`;
   });

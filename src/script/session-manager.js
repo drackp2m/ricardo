@@ -27,16 +27,18 @@ class SessionManager {
   }
 
   /**
-   * @param {string|null} url
+   * @param {string} url
    * @returns {void}
    */
   setRedirectUrl(url) {
-    if (url === null) {
-      sessionStorage.removeItem(this.#REDIRECT_URL);
-      return;
-    }
-    
     sessionStorage.setItem(this.#REDIRECT_URL, url);
+  }
+
+  /**
+   * 
+   */
+  clearRedirectUrl() {
+    sessionStorage.removeItem(this.#REDIRECT_URL);
   }
 
   /**
@@ -96,7 +98,7 @@ class SessionManager {
    * @returns {Promise<UserData|null>}
    */
   refreshUserData() {
-    this.setUserDataToSessionStorage(null);
+    this.#setUserDataToSessionStorage(null);
 
     return this.getUserData();
   }
@@ -137,7 +139,7 @@ class SessionManager {
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', refreshToken);
 
-    this.setUserDataToSessionStorage(null);
+    this.#setUserDataToSessionStorage(null);
 
     Logger.debug('Session tokens set');
   }
@@ -148,7 +150,8 @@ class SessionManager {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
 
-    this.setUserDataToSessionStorage(null);
+    this.#setUserDataToSessionStorage(null);
+    this.#clearInitialCheck();
 
     Logger.debug('Session ended');
   }
@@ -173,10 +176,17 @@ class SessionManager {
   }
 
   /**
+   * @returns {void}
+   */
+  #clearInitialCheck() {
+    sessionStorage.removeItem(this.#INITIAL_CHECK_KEY);
+  }
+
+  /**
    * @param {UserData} userData
    * @returns {void}
    */
-  setUserDataToSessionStorage(userData) {
+  #setUserDataToSessionStorage(userData) {
     if (userData === null) {
       sessionStorage.removeItem(this.#USER_DATA_KEY);
     } else {
@@ -197,7 +207,7 @@ class SessionManager {
         return null;
       }
 
-      this.setUserDataToSessionStorage(response.data ?? null);
+      this.#setUserDataToSessionStorage(response.data ?? null);
 
       return response.data;
     } catch (error) {

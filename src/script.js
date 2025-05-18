@@ -2,7 +2,6 @@ import { googleSheets } from './script/google-sheets/main.js';
 import { url } from './script/config.js';
 import { getYearAndWeekByDate, isPathInRouteList } from './script/utils.js';
 import { sessionManager } from './script/session-manager.js';
-import { Logger } from './script/logger.js';
 
 /**
  * @typedef {'checking-local'|'checking-remote'|'loading-data'} UIStatus
@@ -41,8 +40,6 @@ class AppMain {
 
     const isInitialCheckCompleted = sessionManager.isInitialCheckCompleted();
 
-    Logger.debug('isInitialCheckCompleted', isInitialCheckCompleted);
-
     if (isInitialCheckCompleted === false) {
       sessionManager.setInitialCheckCompleted();
 
@@ -56,8 +53,6 @@ class AppMain {
     }
 
     const hasStatusRedirection = await this.#checkUserStatusAndRedirect();
-
-    Logger.debug('hasStatusRedirection', hasStatusRedirection);
 
     if (hasStatusRedirection === true) {
       return;
@@ -90,23 +85,26 @@ class AppMain {
   async #checkUserStatusAndRedirect() {
     const isLoggedIn = sessionManager.isLoggedIn();
 
-    console.log({ isLoggedIn });
-
     if (isLoggedIn === false) {
       return this.#redirectTo('/page/login');
     }
 
-    const isActive = await sessionManager.hasStatus('ACTIVE');
+    const isLogoutPath = isPathInRouteList(location.pathname, ['/page/logout']);
 
-    console.log({ isActive });
+    if (isLogoutPath === true) {
+      return false;
+    }
+
+    const isActive = await sessionManager.hasStatus('ACTIVE');
 
     if (isActive === false) {
       return this.#redirectTo('/page/status');
     }
 
-    const publicRoutes = ['/page/login', '/page/register*'];
+    const publicRoutes = ['/page/register*', '/page/login'];
+    const isPublicPath = isPathInRouteList(location.pathname, publicRoutes);
 
-    if (isPathInRouteList(location.pathname, publicRoutes) === true) {
+    if (isPublicPath === true) {
       return this.#redirectTo('/page/clock-in');
     }
 
@@ -131,7 +129,6 @@ class AppMain {
    */
   async #checkUserSession() {
     this.#updateUIStatus('checking-local');
-    console.log('Checking local session...');
 
     const isLoggedIn = sessionManager.isLoggedIn();
 
@@ -153,7 +150,7 @@ class AppMain {
     const hasActiveStatus = await sessionManager.hasStatus('ACTIVE');
 
     if (hasActiveStatus === false) {
-      sessionManager.setRedirectUrl(null);
+      sessionManager.clearRedirectUrl();
       this.#redirectTo('/page/status');
 
       return;
@@ -173,8 +170,6 @@ class AppMain {
    * @returns {void}
    */
   #updateUIStatus(status) {
-    console.log('Updating UI status:', document.getElementById('check-local'));
-
     switch (status) {
       case 'checking-local':
         document.getElementById('check-local')?.classList.replace('invisible', 'spinner-line');
@@ -213,6 +208,4 @@ class AppMain {
 
 export const main = new AppMain();
 
-main.onReady(() => {
-  console.log('AppMain is ready');
-});
+main.onReady(() => {});
