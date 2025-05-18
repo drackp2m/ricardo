@@ -1,8 +1,8 @@
-import { mainReady } from '../../script.js';
+import { main } from '../../script.js';
 import { FormManager } from '../../script/form-manager.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
 
-mainReady.then(() => {
+main.onReady(() => {
   const form = new FormManager('register-form', 'feedback');
 
   form.onSubmit(async () => {

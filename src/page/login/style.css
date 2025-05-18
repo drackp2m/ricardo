@@ -3,3 +3,7 @@
 input {
   min-width: 380px;
 }
+
+.google-signin-button {
+  height: 40px;
+}

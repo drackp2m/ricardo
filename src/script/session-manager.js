@@ -1,5 +1,4 @@
 import { googleSheets } from './google-sheets/main.js';
-import { httpClient } from './http-client.js';
 import { Logger } from './logger.js';
 
 /**
@@ -8,21 +7,50 @@ import { Logger } from './logger.js';
 
 class SessionManager {
   #USER_DATA_KEY = 'userData';
+  #INITIAL_CHECK_KEY = 'initialCheck';
+  #REDIRECT_URL = 'redirectUrl';
   /** @type {Promise<UserData|null|undefined>|null} */
   #loadUserDataPromise = null;
 
   /**
    * @returns {boolean}
    */
-  isLoggedIn() {
-    return localStorage.getItem('authToken') !== null;
+  isInitialCheckCompleted() {
+    return sessionStorage.getItem(this.#INITIAL_CHECK_KEY) !== null;
+  }
+
+  /**
+   * @returns {void}
+   */
+  setInitialCheckCompleted() {
+    sessionStorage.setItem(this.#INITIAL_CHECK_KEY, 'true');
+  }
+
+  /**
+   * @param {string|null} url
+   * @returns {void}
+   */
+  setRedirectUrl(url) {
+    if (url === null) {
+      sessionStorage.removeItem(this.#REDIRECT_URL);
+      return;
+    }
+    
+    sessionStorage.setItem(this.#REDIRECT_URL, url);
+  }
+
+  /**
+   * @returns {string|null}
+   */
+  getRedirectUrl() {
+    return sessionStorage.getItem(this.#REDIRECT_URL);
   }
 
   /**
    * @returns {boolean}
    */
-  isInitialSessionCheckCompleted() {
-    return sessionStorage.getItem(this.#USER_DATA_KEY) !== undefined;
+  isLoggedIn() {
+    return localStorage.getItem('authToken') !== null;
   }
 
   /**
@@ -43,8 +71,10 @@ class SessionManager {
    * @returns {Promise<UserData|null>}
    */
   async getUserData() {
-    if (this.isInitialSessionCheckCompleted() === true) {
-      return this.#getUserDataFromSessionStorage();
+    const userFromSessionStorage = this.#getUserDataFromSessionStorage();
+
+    if (userFromSessionStorage !== null) {
+      return userFromSessionStorage;
     }
 
     if (this.isLoggedIn() === false) {
@@ -83,6 +113,20 @@ class SessionManager {
     }
 
     return roles.includes(userData.rol);
+  }
+
+  /**
+   * @param {...string} statuses
+   * @returns {Promise<boolean>}
+   */
+  async hasStatus(...statuses) {
+    const userData = await this.getUserData();
+
+    if (userData === null || statuses.length === 0) {
+      return false;
+    }
+
+    return statuses.includes(userData.status);
   }
 
   /**

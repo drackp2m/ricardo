@@ -1,12 +1,12 @@
-import { setInfoToHtml } from './script/utils.js';
-import { ChartManager } from './script/chart-manager.js';
-
-import { mainReady } from '../../script.js';
+import { main } from '../../script.js';
 import { getWeeksNumberByYear, getYearAndWeekByDate } from '../../script/utils.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
 import { FormManager } from '../../script/form-manager.js';
 
-mainReady.then(async () => {
+import { setInfoToHtml } from './script/utils.js';
+import { ChartManager } from './script/chart-manager.js';
+
+main.onReady(async () => {
   const formManager = new FormManager('work-history-form');
   formManager.disable();
 

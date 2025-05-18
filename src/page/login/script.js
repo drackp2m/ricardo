@@ -1,4 +1,4 @@
-import { mainReady } from '../../script.js';
+import { main } from '../../script.js';
 import { url } from '../../script/config.js';
 import { FormManager } from '../../script/form-manager.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
@@ -12,7 +12,7 @@ import { sessionManager } from '../../script/session-manager.js';
  * @property {string} select_by
  */
 
-mainReady.then(() => {
+main.onReady(() => {
   const form = new FormManager('form', 'feedback');
 
   form.onSubmit(() => {

@@ -1,10 +1,10 @@
-import { mainReady } from '../../script.js';
+import { main } from '../../script.js';
 import { FormManager } from '../../script/form-manager.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
 import { formatDateToISO8601, getYearAndWeekByDate } from '../../script/utils.js';
 import { workHistoryCache } from '../../script/work-history-cache.js';
 
-mainReady.then(() => {
+main.onReady(() => {
   const formManager = new FormManager('clock-in-form', 'feedback');
 
   const now = new Date();
