@@ -1,3 +1,5 @@
+import { url } from './config.js';
+
 /**
  * @param {number} weekOffset
  * @param {boolean} toTodayOnly
@@ -147,6 +149,27 @@ export function isPathInRouteList(targetPath, routePatterns) {
     return normalizedCurrentPath === baseRoute || normalizedCurrentPath.startsWith(`${baseRoute}/`);
   });
 }
+
+/**
+ * @param {string} path
+ * @returns {boolean}
+ */
+export function navigateTo(path) {
+  const pathInLocationPathName = isPathInRouteList(location.pathname, [path]);
+
+  if (pathInLocationPathName === true) {
+    return false;
+  }
+
+  if (path.startsWith(url.basePathname) === false && path.startsWith('http') === false) {
+    path = `${url.basePathname}${path}`;
+  }
+
+  window.location.href = path;
+
+  return true;
+}
+
 /**
  * @param {string} str
  * @param {string} char

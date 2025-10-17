@@ -71,6 +71,12 @@ button {
   justify-content: center;
 }
 
+button.small {
+  font-size: var(--font-xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--space-1);
+}
+
 button:disabled {
   background-color: var(--color-primary-disabled);
   color: var(--color-glass-md);

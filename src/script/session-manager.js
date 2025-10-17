@@ -139,7 +139,7 @@ class SessionManager {
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', refreshToken);
 
-    this.#setUserDataToSessionStorage(null);
+    // this.#setUserDataToSessionStorage(null);
 
     Logger.debug('Session tokens set');
   }

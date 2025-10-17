@@ -1,5 +1,6 @@
 import { url } from '../config.js';
 import { httpClient } from '../http-client.js';
+import { Logger } from '../logger.js';
 import { getWeekRangeFromYearAndWeek } from '../utils.js';
 import { workHistoryCache } from '../work-history-cache.js';
 
@@ -20,7 +21,7 @@ export async function getWorkHistory(year, week, useCache) {
   if (useCache === true) {
     const cached = workHistoryCache.get(year, week);
 
-    if (cached !== null) {
+    if (cached !== null && cached.data !== undefined) {
       return { success: true, data: cached.data };
     }
   }

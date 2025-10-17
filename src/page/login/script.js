@@ -45,7 +45,7 @@ window.handleGoogleLogin = function (response) {
   const clientId = response.clientId;
   const credential = response.credential;
 
-  const formManager = new FormManager('login-form', 'feedback');
+  const formManager = new FormManager('form', 'feedback');
 
   formManager.disable('login-form-submit');
 
@@ -61,6 +61,6 @@ window.handleGoogleLogin = function (response) {
 
     sessionManager.setSession(authToken, refreshToken);
 
-    window.location.href = `${url.basePathname}page/clock-in`;
+    window.location.href = `${url.basePathname}`;
   });
 };

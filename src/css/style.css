@@ -37,6 +37,12 @@ body::before {
   transform: rotate(-35deg);
 }
 
+header {
+  width: 100%;
+  background: var(--color-glass-sm);
+  backdrop-filter: blur(2px);
+}
+
 .card {
   position: relative;
   min-width: 300px;
@@ -69,6 +75,10 @@ body::before {
 
 .card .footer {
   border-radius: 0 0 var(--space-2) var(--space-2);
+}
+
+.loading [class*='icon'] {
+  display: none;
 }
 
 .loading [class*='spinner'] {

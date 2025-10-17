@@ -1,6 +1,7 @@
 import 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
 
 import { formatDateToString } from '../../../script/utils.js';
+import { Logger } from '../../../script/logger.js';
 
 /**
  * @typedef {import('../../../definition/google-sheets/get-entries-between-dates.response.mjs').GetEntriesBetweenDatesResponse} GetEntriesBetweenDatesResponse

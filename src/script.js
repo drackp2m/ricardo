@@ -1,7 +1,10 @@
 import { googleSheets } from './script/google-sheets/main.js';
 import { url } from './script/config.js';
-import { getYearAndWeekByDate, isPathInRouteList } from './script/utils.js';
+import { getYearAndWeekByDate, isPathInRouteList, navigateTo } from './script/utils.js';
 import { sessionManager } from './script/session-manager.js';
+import { redirectByUserStatus } from './script/user-status-redirection.js';
+import { Logger } from './script/logger.js';
+import { headerComponent } from './component/header/header.component.js';
 
 /**
  * @typedef {'checking-local'|'checking-remote'|'loading-data'} UIStatus
@@ -41,18 +44,18 @@ class AppMain {
     const isInitialCheckCompleted = sessionManager.isInitialCheckCompleted();
 
     if (isInitialCheckCompleted === false) {
-      sessionManager.setInitialCheckCompleted();
-
       await this.#waitForDOMContent();
 
       await this.#checkUserSession();
 
-      await this.#checkUserStatusAndRedirect();
+      await redirectByUserStatus();
+
+      sessionManager.setInitialCheckCompleted();
 
       return;
     }
-
-    const hasStatusRedirection = await this.#checkUserStatusAndRedirect();
+    
+    const hasStatusRedirection = await redirectByUserStatus();
 
     if (hasStatusRedirection === true) {
       return;
@@ -80,38 +83,6 @@ class AppMain {
   }
 
   /**
-   * @returns {Promise<boolean>}
-   */
-  async #checkUserStatusAndRedirect() {
-    const isLoggedIn = sessionManager.isLoggedIn();
-
-    if (isLoggedIn === false) {
-      return this.#redirectTo('/page/login');
-    }
-
-    const isLogoutPath = isPathInRouteList(location.pathname, ['/page/logout']);
-
-    if (isLogoutPath === true) {
-      return false;
-    }
-
-    const isActive = await sessionManager.hasStatus('ACTIVE');
-
-    if (isActive === false) {
-      return this.#redirectTo('/page/status');
-    }
-
-    const publicRoutes = ['/page/register*', '/page/login'];
-    const isPublicPath = isPathInRouteList(location.pathname, publicRoutes);
-
-    if (isPublicPath === true) {
-      return this.#redirectTo('/page/clock-in');
-    }
-
-    return false;
-  }
-
-  /**
    * @returns {Promise<void>}
    */
   #waitForDOMContent() {
@@ -128,12 +99,14 @@ class AppMain {
    * @returns {Promise<void>}
    */
   async #checkUserSession() {
+    Logger.debug('Checking user session...');
+
     this.#updateUIStatus('checking-local');
 
     const isLoggedIn = sessionManager.isLoggedIn();
 
     if (isLoggedIn === false) {
-      this.#redirectTo(`/page/login`);
+      navigateTo(`/page/login`);
 
       return;
     }
@@ -142,7 +115,7 @@ class AppMain {
     const userData = await sessionManager.getUserData();
 
     if (userData === null) {
-      this.#redirectTo(`/page/login`);
+      navigateTo(`/page/login`);
 
       return;
     }
@@ -151,7 +124,7 @@ class AppMain {
 
     if (hasActiveStatus === false) {
       sessionManager.clearRedirectUrl();
-      this.#redirectTo('/page/status');
+      navigateTo('/page/status');
 
       return;
     }
@@ -162,7 +135,7 @@ class AppMain {
 
     await googleSheets.getWorkHistory(year, week, false);
 
-    this.#redirectTo(redirectTo ?? '/page/clock-in');
+    navigateTo(redirectTo ?? '/page/clock-in');
   }
 
   /**
@@ -184,28 +157,17 @@ class AppMain {
         break;
     }
   }
-
-  /**
-   * @param {string} path
-   * @returns {boolean}
-   */
-  #redirectTo(path) {
-    const pathInLocationPathName = isPathInRouteList(location.pathname, [path]);
-
-    if (pathInLocationPathName === true) {
-      return false;
-    }
-
-    if (path.startsWith(url.basePathname) === false && path.startsWith('http') === false) {
-      path = `${url.basePathname}${path}`;
-    }
-
-    window.location.href = path;
-
-    return true;
-  }
 }
 
 export const main = new AppMain();
 
-main.onReady(() => {});
+main.onReady(async () => {
+  const header = await fetch('/component/header/header.component.html');
+
+  const body = document.querySelector('body');
+  const headerElement = document.createElement('header');
+  headerElement.innerHTML = await header.text();
+  body.prepend(headerElement);
+
+  headerComponent();
+});

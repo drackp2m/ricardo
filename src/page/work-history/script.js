@@ -46,6 +46,12 @@ main.onReady(async () => {
     updateChartAndHtmlInfo(true);
   });
 
+  document.getElementById('reload-without-cache').addEventListener('click', async () => {
+    formManager.disable('reload-without-cache');
+
+    reloadWithoutCache();
+  })
+
   /**
    * @param {boolean} nextWeek
    */
@@ -62,7 +68,18 @@ main.onReady(async () => {
       currentWeek += modification;
     }
 
-    const entries = await googleSheets.getWorkHistory(currentYear, currentWeek, true);
+    getWorkHistoryAndUpdate();
+  }
+
+  async function reloadWithoutCache() {
+    getWorkHistoryAndUpdate(false);
+  }
+
+  /**
+   * @param {boolean} cache
+   */
+  async function getWorkHistoryAndUpdate(cache = true) {
+    const entries = await googleSheets.getWorkHistory(currentYear, currentWeek, cache);
 
     setInfoToHtml(currentYear, currentWeek);
 

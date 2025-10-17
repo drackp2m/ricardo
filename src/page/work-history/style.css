@@ -7,7 +7,3 @@
 .canvas p {
   position: absolute;
 }
-
-button.loading [class*='chevron-'] {
-  display: none;
-}

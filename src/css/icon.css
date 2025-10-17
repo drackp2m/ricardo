@@ -26,6 +26,11 @@
   mask-image: url('../asset/icon/chevron-right.svg');
 }
 
+.icon.rotate-right {
+  -webkit-mask-image: url('../asset/icon/rotate-right.svg');
+  mask-image: url('../asset/icon/rotate-right.svg');
+}
+
 .icon.spinner-dots {
   -webkit-mask-image: url('../asset/icon/spinner-dots.svg');
   mask-image: url('../asset/icon/spinner-dots.svg');
@@ -48,7 +53,8 @@
 }
 
 .icon.spinner-dots,
-.icon.spinner-line {
+.icon.spinner-line,
+.icon.rotate-right {
   aspect-ratio: 512 / 512;
 }
 

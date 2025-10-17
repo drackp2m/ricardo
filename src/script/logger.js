@@ -337,5 +337,3 @@ export class Logger {
     return crypto.randomUUID();
   }
 }
-
-Logger.getInstance();

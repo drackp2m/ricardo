@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base href="/" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;" />
-    <link rel="stylesheet" href="page/login/style.css" />
-    <script async src="https://accounts.google.com/gsi/client" />
-    <script async type="module" src="page/login/script.js" />
-    <title>Login - Ricardo Gelats</title>
-  </head>
 
-  <body class="flex-col justify-center align-center p-4 pb-16">
+<head>
+  <base href="/" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;" />
+  <link rel="stylesheet" href="page/login/style.css" />
+  <script async src="https://accounts.google.com/gsi/client"></script>
+  <script async type="module" src="page/login/script.js"></script>
+  <title>Login - Ricardo Gelats</title>
+</head>
+
+<body class="flex-col align-center">
+  <main class="content-fixed flex-col justify-center align-center flex-grow py-10">
     <form id="form" class="card">
       <div class="header px-4 py-2 text-center">
         <h3><a href="">Login</a></h3>
@@ -20,24 +22,12 @@
       <div class="body flex-col gap-4 px-4 pt-3 pb-4">
         <div class="form-group flex-col gap-1">
           <label for="email-input">Email:</label>
-          <input
-            type="email"
-            id="email-input"
-            name="email"
-            required
-            placeholder="johndoe@domain.com"
-          />
+          <input type="email" id="email-input" name="email" required placeholder="johndoe@domain.com" />
         </div>
 
         <div class="form-group flex-col gap-1">
           <label for="password-input">Password:</label>
-          <input
-            type="password"
-            id="password-input"
-            name="password"
-            required
-            placeholder="••••••••••••••"
-          />
+          <input type="password" id="password-input" name="password" required placeholder="••••••••••••••" />
         </div>
 
         <p id="feedback" class="font-sm text-right weight-lg">&nbsp;</p>
@@ -50,27 +40,23 @@
         <div class="separator">or if you prefer</div>
 
         <div class="google-signin-button self-center flex-shrink">
-          <div
-            id="g_id_onload"
+          <div id="g_id_onload"
             data-client_id="758402866221-j41hlcqfs0kucrfrdkbjn2eoq159uq8a.apps.googleusercontent.com"
-            data-callback="handleGoogleLogin"
-            data-context="signin"
-            data-ux_mode="popup"
-            data-cancel_on_tap_outside="false"
-            data-auto_select="false"
-            data-auto_prompt="false"
-          ></div>
-          <div
-            class="g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="sign_in_with"
-            data-shape="rectangular"
-            data-logo_alignment="left"
-          ></div>
+            data-callback="handleGoogleLogin" data-context="signin" data-ux_mode="popup"
+            data-cancel_on_tap_outside="false" data-auto_select="false" data-auto_prompt="false"></div>
+          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+            data-shape="rectangular" data-logo_alignment="left"></div>
+
         </div>
       </div>
+
+      <div class="footer p-4 pt-0 flex-row justify-end">
+        <p class="font-sm">
+          Don't have an account? <a href="/page/register">Register</a>
+        </p>
+      </div>
     </form>
-  </body>
+  </main>
+</body>
+
 </html>
