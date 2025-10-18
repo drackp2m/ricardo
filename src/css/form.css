@@ -90,3 +90,10 @@ button .icon {
   background-color: var(--color-primary-contrast);
 }
 
+.loading [class*='icon'] {
+  display: none;
+}
+
+.loading [class*='spinner'] {
+  display: initial;
+}

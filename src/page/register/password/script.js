@@ -1,7 +1,7 @@
 import { main } from '../../../script.js';
 import { FormManager } from '../../../script/form-manager.js';
 import { googleSheets } from '../../../script/google-sheets/main.js';
-import { splitByLastOccurrence } from '../../../script/utils.js';
+import { navigateTo, splitByLastOccurrence } from '../../../script/utils.js';
 
 main.onReady(() => {
   const form = new FormManager('register-form', 'feedback');
@@ -48,6 +48,6 @@ main.onReady(() => {
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', refreshToken);
 
-    document.location.href = '/page/clock-in';
+    navigateTo('/page/clock-in');
   });
 });

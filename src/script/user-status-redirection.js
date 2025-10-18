@@ -1,3 +1,4 @@
+import { url } from './config.js';
 import { Logger } from './logger.js';
 import { sessionManager } from './session-manager.js';
 import { isPathInRouteList, navigateTo } from './utils.js';
@@ -34,7 +35,7 @@ export async function redirectByUserStatus() {
   }
 
   const isInitialCheckCompleted = sessionManager.isInitialCheckCompleted();
-  const isInBasePath = isPathInRouteList(location.pathname, ['/']);
+  const isInBasePath = isPathInRouteList(location.pathname, [url.basePathname]);
 
   if (isInitialCheckCompleted === true && isInBasePath === true) {
     return navigateTo('/page/clock-in');

@@ -1,5 +1,6 @@
 import { url } from './config.js';
 import { sessionManager } from './session-manager.js';
+import { navigateTo } from './utils.js';
 
 /**
  * @template T
@@ -50,7 +51,7 @@ class HttpClient {
         }
 
         if (data.success === false && data.error === 'error_required_parameter.authToken') {
-          window.location.href = '/page/login?reason=session_expired';
+          navigateTo('/page/login?reason=session_expired');
         }
 
         return data;
@@ -97,7 +98,7 @@ class HttpClient {
           localStorage.removeItem('authToken');
           localStorage.removeItem('refreshToken');
 
-          window.location.href = '/page/login?reason=session_expired';
+          navigateTo('/page/login?reason=session_expired');
 
           return false;
         }

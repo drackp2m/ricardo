@@ -1,6 +1,6 @@
 import { googleSheets } from './script/google-sheets/main.js';
 import { url } from './script/config.js';
-import { getYearAndWeekByDate, isPathInRouteList, navigateTo } from './script/utils.js';
+import { getYearAndWeekByDate, navigateTo } from './script/utils.js';
 import { sessionManager } from './script/session-manager.js';
 import { redirectByUserStatus } from './script/user-status-redirection.js';
 import { Logger } from './script/logger.js';
@@ -54,7 +54,7 @@ class AppMain {
 
       return;
     }
-    
+
     const hasStatusRedirection = await redirectByUserStatus();
 
     if (hasStatusRedirection === true) {
@@ -77,7 +77,7 @@ class AppMain {
 
     sessionManager.setRedirectUrl(location.pathname);
 
-    window.location.href = url.basePathname;
+    navigateTo(url.basePathname)
 
     return true;
   }
@@ -162,11 +162,13 @@ class AppMain {
 export const main = new AppMain();
 
 main.onReady(async () => {
-  const header = await fetch('/component/header/header.component.html');
+  const header = await fetch('component/header/header.component.html');
 
   const body = document.querySelector('body');
   const headerElement = document.createElement('header');
+
   headerElement.innerHTML = await header.text();
+
   body.prepend(headerElement);
 
   headerComponent();

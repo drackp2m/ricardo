@@ -77,14 +77,6 @@ header {
   border-radius: 0 0 var(--space-2) var(--space-2);
 }
 
-.loading [class*='icon'] {
-  display: none;
-}
-
-.loading [class*='spinner'] {
-  display: initial;
-}
-
 .separator {
   display: flex;
   flex-direction: row;

@@ -1,4 +1,5 @@
 import { url } from './config.js';
+import { Logger } from './logger.js';
 
 /**
  * @param {number} weekOffset
@@ -155,14 +156,14 @@ export function isPathInRouteList(targetPath, routePatterns) {
  * @returns {boolean}
  */
 export function navigateTo(path) {
-  const pathInLocationPathName = isPathInRouteList(location.pathname, [path]);
+  const pathInLocationPathName = isPathInRouteList(location.pathname, [`${url.basePathname}${path.slice(1)}`]);
 
   if (pathInLocationPathName === true) {
     return false;
   }
 
   if (path.startsWith(url.basePathname) === false && path.startsWith('http') === false) {
-    path = `${url.basePathname}${path}`;
+    path = `${url.basePathname}${path.slice(1)}`;
   }
 
   window.location.href = path;

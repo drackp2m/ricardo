@@ -3,6 +3,7 @@ import { url } from '../../script/config.js';
 import { FormManager } from '../../script/form-manager.js';
 import { googleSheets } from '../../script/google-sheets/main.js';
 import { sessionManager } from '../../script/session-manager.js';
+import { navigateTo } from '../../script/utils.js';
 
 /**
  * @typedef GoogleLoginResponse
@@ -31,7 +32,7 @@ main.onReady(() => {
 
       sessionManager.setSession(authToken, refreshToken);
 
-      window.location.href = url.basePathname;
+      navigateTo(url.basePathname);
     });
   });
 });
@@ -61,6 +62,6 @@ window.handleGoogleLogin = function (response) {
 
     sessionManager.setSession(authToken, refreshToken);
 
-    window.location.href = `${url.basePathname}`;
+    navigateTo(url.basePathname)
   });
 };
